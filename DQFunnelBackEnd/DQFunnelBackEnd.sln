@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Services Layer", "1. Services Layer", "{C0E37B0B-32F8-47DB-816E-90F189AEE1C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Business Logic Layer", "2. Business Logic Layer", "{3EDD7939-97EF-47ED-8C6A-97691B93ECDF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Business Object Layer", "3. Business Object Layer", "{C62DC1F5-F34C-47AF-BE78-F5BD3730E919}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Data Access Layer", "4. Data Access Layer", "{1FD1BF6F-57A1-4416-A602-ED8E5BBCEC1F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DQFunnel.DataAccess", "DQFunnel.DataAccess\DQFunnel.DataAccess.csproj", "{FFC38AF3-1889-465C-9EBE-3AA05D717809}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DQFunnel.BusinessObject", "DQFunnel.BusinessObject\DQFunnel.BusinessObject.csproj", "{0D4D8FDD-7A37-4DED-A9A1-C1CCB08B0F38}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DQFunnel.BusinessLogic", "DQFunnel.BusinessLogic\DQFunnel.BusinessLogic.csproj", "{FE0D0374-648B-4026-B281-883ED82CAEEB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DQFunnel.WebApi", "DQFunnel.WebApi\DQFunnel.WebApi.csproj", "{07389414-0A11-4316-99F0-9CA6ABA05604}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFC38AF3-1889-465C-9EBE-3AA05D717809}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFC38AF3-1889-465C-9EBE-3AA05D717809}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFC38AF3-1889-465C-9EBE-3AA05D717809}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFC38AF3-1889-465C-9EBE-3AA05D717809}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D4D8FDD-7A37-4DED-A9A1-C1CCB08B0F38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D4D8FDD-7A37-4DED-A9A1-C1CCB08B0F38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D4D8FDD-7A37-4DED-A9A1-C1CCB08B0F38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D4D8FDD-7A37-4DED-A9A1-C1CCB08B0F38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE0D0374-648B-4026-B281-883ED82CAEEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE0D0374-648B-4026-B281-883ED82CAEEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE0D0374-648B-4026-B281-883ED82CAEEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE0D0374-648B-4026-B281-883ED82CAEEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07389414-0A11-4316-99F0-9CA6ABA05604}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07389414-0A11-4316-99F0-9CA6ABA05604}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07389414-0A11-4316-99F0-9CA6ABA05604}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07389414-0A11-4316-99F0-9CA6ABA05604}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FFC38AF3-1889-465C-9EBE-3AA05D717809} = {1FD1BF6F-57A1-4416-A602-ED8E5BBCEC1F}
+		{0D4D8FDD-7A37-4DED-A9A1-C1CCB08B0F38} = {C62DC1F5-F34C-47AF-BE78-F5BD3730E919}
+		{FE0D0374-648B-4026-B281-883ED82CAEEB} = {3EDD7939-97EF-47ED-8C6A-97691B93ECDF}
+		{07389414-0A11-4316-99F0-9CA6ABA05604} = {C0E37B0B-32F8-47DB-816E-90F189AEE1C5}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CB4548D3-6345-4BD0-9E47-52406FB31921}
+	EndGlobalSection
+EndGlobal

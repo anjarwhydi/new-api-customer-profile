@@ -1,0 +1,44 @@
+﻿using DQFunnel.DataAccess.Interfaces;
+using DQFunnel.DataAccess.Repositories;
+using System;
+using System.Data;
+
+namespace DQFunnel.DataAccess
+{
+
+    public class UnitOfWork : IUnitOfWork
+    {
+        private IDapperContext _context;
+        private IDbTransaction _transaction;
+
+        public UnitOfWork(IDapperContext context)
+        {
+            this._context = context;
+        }
+
+        public void BeginTransaction()
+        {
+            if (_transaction != null)
+                throw new NullReferenceException("Not finished previous transaction");
+
+            _transaction = _context.db.BeginTransaction();
+        }
+
+        public void Commit()
+        {
+            if (_transaction == null)
+                throw new NullReferenceException("Try commit not opened transaction");
+
+            _transaction.Commit();
+        }
+
+
+        /*Below is the implementation of IUnitOfWork that we created earlier*/
+
+        
+        private IFunnelOpportunityRepository funnelOpportunityRepository;
+        public IFunnelOpportunityRepository FunnelOpportunityRepository => funnelOpportunityRepository ?? (funnelOpportunityRepository = new FunnelOpportunityRepository(_transaction, _context));
+
+       
+    }
+}

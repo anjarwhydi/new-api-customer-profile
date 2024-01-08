@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DQFunnel.BusinessObject\DQFunnel.BusinessObject.csproj" />
+    <ProjectReference Include="..\DQFunnel.ElasticBusinessObject\DQFunnel.ElasticBusinessObject.csproj" />
+    <ProjectReference Include="..\DQFunnel.ElasticDataAccess\DQFunnel.ElasticDataAccess.csproj" />
+  </ItemGroup>
+
+</Project>

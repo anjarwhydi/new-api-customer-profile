@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain.Core\Domain.Core.csproj" />
+    <ProjectReference Include="..\DQFunnel.BusinessObject\DQFunnel.BusinessObject.csproj" />
+    <ProjectReference Include="..\DQFunnel.DataAccess\DQFunnel.DataAccess.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="EventsHandlers\" />
+  </ItemGroup>
+
+</Project>

@@ -128,9 +128,9 @@ namespace DQFunnel.WebApi
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtConfig["Issuer"],
-                    ValidAudience = jwtConfig["Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig["SecretKey"]))
+                    ValidIssuer = jwtConfig["Issuer"] ?? "DefaultIssuer",
+                    ValidAudience = jwtConfig["Audience"] ?? "DefaultAudience",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig["SecretKey"] ?? "RAHASIASEKALI"))
                 };
             });
         }

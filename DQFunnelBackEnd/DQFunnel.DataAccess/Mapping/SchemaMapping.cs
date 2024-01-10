@@ -10,7 +10,7 @@ namespace OMS.DataAccess.Mapping
     {
         public override void Table(string tableName)
         {
-            string[] arrSchema = { "sales","history","file","guest"};
+            string[] arrSchema = { "sales","history","file","guest", "cp"};
             string[] schemaClass = tableName.SplitCamelCase();          
             string schema = schemaClass.First().ToLower();
             if(!string.IsNullOrEmpty(Array.Find(arrSchema, c=>c.Equals(schema))))

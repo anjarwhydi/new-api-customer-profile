@@ -38,7 +38,8 @@ namespace DQFunnel.DataAccess
         
         private IFunnelOpportunityRepository funnelOpportunityRepository;
         public IFunnelOpportunityRepository FunnelOpportunityRepository => funnelOpportunityRepository ?? (funnelOpportunityRepository = new FunnelOpportunityRepository(_transaction, _context));
-
+        private ICustomerSettingRepository customerSettingRepository;
+        public ICustomerSettingRepository CustomerSettingRepository => customerSettingRepository ?? (customerSettingRepository = new CustomerSettingRepository(_transaction, _context));
        
     }
 }

@@ -14,6 +14,7 @@ namespace DQFunnel.DataAccess.Interfaces
          */
         
 		IFunnelOpportunityRepository FunnelOpportunityRepository { get; }
+        ICustomerSettingRepository CustomerSettingRepository { get; }
 		
     }
 }

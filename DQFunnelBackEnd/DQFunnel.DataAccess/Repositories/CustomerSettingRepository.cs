@@ -23,7 +23,7 @@ namespace DQFunnel.DataAccess.Repositories
 
         public List<Req_CustomerSettingNoNamedAccount_ViewModel> GetCustomerSettingNoNamedAccount(string search, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
-            _sql = "[cs].[spGetListBySearch]";
+            _sql = "[cp].[spGetCustomerSettingNoNamedAccounts]";
             var vParams = new DynamicParameters();
             vParams.Add("@SearchKeyword", search);
             vParams.Add("@PMOCustomer", pmoCustomer);
@@ -36,7 +36,7 @@ namespace DQFunnel.DataAccess.Repositories
 
         public List<CpCustomerSettingDashboard> GetCustomerSettingNamedAccount(string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
-            _sql = "[cs].[spGetListBySearch]";
+            _sql = "[cp].[spGetCustomerSettingNamedAccounts]";
             var vParams = new DynamicParameters();
             vParams.Add("@SearchKeyword", search);
             vParams.Add("@PMOCustomer", pmoCustomer);

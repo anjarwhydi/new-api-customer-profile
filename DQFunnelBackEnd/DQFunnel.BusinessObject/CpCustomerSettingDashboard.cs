@@ -17,6 +17,8 @@ namespace DQFunnel.BusinessObject
         public string RelatedCustomer { get; set; }
         public bool Blacklist { get; set; }
         public bool Holdshipmet { get; set; }
+        public bool Named { get; set; }
+        public bool Shareable { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedDate { get; set; }
         public string ModifiedBy { get; set; }

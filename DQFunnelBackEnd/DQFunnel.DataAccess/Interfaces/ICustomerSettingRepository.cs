@@ -10,5 +10,8 @@ namespace DQFunnel.DataAccess.Interfaces
     {
         List<Req_CustomerSettingNoNamedAccount_ViewModel> GetCustomerSettingNoNamedAccount(string search, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
         List<CpCustomerSettingDashboard> GetCustomerSettingNamedAccount(string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
+        List<CpCustomerSettingDashboard> GetCustomerSettingSharebleAccount(string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
+        CpCustomerSetting GetCustomerSettingByCustomerSettingID(long customerSettingID);
+        CpCustomerSetting GetCustomerSettingByCustomerID(long customerID);
     }
 }

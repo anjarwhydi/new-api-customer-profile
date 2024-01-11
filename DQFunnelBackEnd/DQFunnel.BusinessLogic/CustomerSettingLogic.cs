@@ -219,6 +219,65 @@ namespace DQFunnel.BusinessLogic
 
             return result;
         }
+        public CpCustomerSettingEnvelope GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        {
+            CpCustomerSettingEnvelope result = new CpCustomerSettingEnvelope();
+
+            if (sorting != null)
+            {
+                if (sorting.ToLower() == "descending")
+                    sorting = "desc";
+                if (sorting.ToLower() == "ascending")
+                    sorting = "asc";
+            }
+
+            using (_context)
+            {
+                IUnitOfWork uow = new UnitOfWork(_context);
+
+                var softwareDashboards = uow.CustomerSettingRepository.GetCpCustomerSettingAllAccount(search, salesName, pmoCustomer, blacklist, holdshipment);
+
+                var resultSoftware = new List<CpCustomerSettingDashboard>();
+
+                if (page > 0)
+                {
+                    var queryable = softwareDashboards.AsQueryable();
+                    resultSoftware = queryable
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToList();
+                }
+                else
+                {
+                    resultSoftware = softwareDashboards;
+                }
+
+                result.TotalRows = softwareDashboards.Count();
+                result.Column = column;
+
+                if (sorting != null)
+                {
+                    if (sorting == "desc")
+                    {
+                        sorting = "descending";
+                        result.Rows = resultSoftware.OrderByDescending(x => x.GetType().GetProperty(column).GetValue(x, null)).ToList();
+                    }
+                    if (sorting == "asc")
+                    {
+                        sorting = "ascending";
+                        result.Rows = resultSoftware.OrderBy(x => x.GetType().GetProperty(column).GetValue(x, null)).ToList();
+                    }
+
+                    result.Sorting = sorting;
+                }
+                else
+                {
+                    result.Rows = resultSoftware.OrderByDescending(c => c.CreatedDate).ToList();
+                }
+            }
+
+            return result;
+        }
         public ResultAction Insert(CpCustomerSetting objEntity)
         {
             ResultAction result = new ResultAction();

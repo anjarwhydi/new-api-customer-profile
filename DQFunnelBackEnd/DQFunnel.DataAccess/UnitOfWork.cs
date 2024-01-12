@@ -35,11 +35,20 @@ namespace DQFunnel.DataAccess
 
         /*Below is the implementation of IUnitOfWork that we created earlier*/
 
-        
+
         private IFunnelOpportunityRepository funnelOpportunityRepository;
         public IFunnelOpportunityRepository FunnelOpportunityRepository => funnelOpportunityRepository ?? (funnelOpportunityRepository = new FunnelOpportunityRepository(_transaction, _context));
         private ICustomerSettingRepository customerSettingRepository;
         public ICustomerSettingRepository CustomerSettingRepository => customerSettingRepository ?? (customerSettingRepository = new CustomerSettingRepository(_transaction, _context));
-       
+        public IInvoicingConditionRepository invoicingConditionRepository;
+        public IInvoicingConditionRepository InvoicingConditionRepository => invoicingConditionRepository ?? (invoicingConditionRepository = new InvoicingConditionRepository(_transaction, _context));
+        public IInvoicingScheduleRepository invoicingScheduleRepository;
+        public IInvoicingScheduleRepository InvoicingScheduleRepository => invoicingScheduleRepository ?? (invoicingScheduleRepository = new InvoicingScheduleRepository(_transaction, _context));
+        public IRelatedCustomerRepository relatedCustomerRepository;
+        public IRelatedCustomerRepository RelatedCustomerRepository => relatedCustomerRepository ?? (relatedCustomerRepository = new RelatedCustomerRepository(_transaction, _context));
+        public IRelatedFileRepository relatedFileRepository;
+        public IRelatedFileRepository RelatedFileRepository => relatedFileRepository ?? (relatedFileRepository = new RelatedFileRepository(_transaction, _context));
+        public ISalesAssignmentRepository salesAssignmentRepository;
+        public ISalesAssignmentRepository SalesAssignmentRepository => salesAssignmentRepository ?? (salesAssignmentRepository = new SalesAssignmentRepository(_transaction, _context));
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DQFunnel.BusinessObject
 {
-    internal class CpRelatedCustomer : BaseEntity
+    public class CpRelatedCustomer : BaseEntity
     {
         public long RCustomerID { get; set; }
         public long CustomerID { get; set; }

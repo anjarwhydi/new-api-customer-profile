@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
 using DQFunnel.BusinessObject;
+using DQFunnel.BusinessObject.ViewModel;
 
 namespace DQFunnel.WebApi.Controllers
 {
@@ -75,8 +76,8 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
-        public IActionResult Insert(CpCustomerSetting objEntity)
+        [HttpPost("ApproveSalesAssignment")]
+        public IActionResult Insert(Req_CustomerSettingInsertCustomerSetting_ViewModel objEntity)
         {
             try
             {
@@ -101,5 +102,19 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpDelete("{customerID}")]
+        public IActionResult Delete(long customerID, long salesID, int ModifyUserID)
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.Delete(customerID, salesID, ModifyUserID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

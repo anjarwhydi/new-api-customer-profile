@@ -287,7 +287,7 @@ namespace DQFunnel.BusinessLogic
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
                     objEntity.CreateDate = DateTime.Now;
-                    uow.CustomerSettingRepository.Add(objEntity);
+                    uow.CustomerSettingRepository.InsertCustomerSetting(objEntity);
                     result = MessageResult(true, "Insert Success!", objEntity);
                 }
             }
@@ -297,7 +297,7 @@ namespace DQFunnel.BusinessLogic
             }
             return result;
         }
-        public ResultAction Update(long customerSettingID, CpCustomerSetting objEntity)
+        public ResultAction Update(long id, CpCustomerSetting objEntity)
         {
             ResultAction result = new ResultAction();
             try
@@ -305,10 +305,12 @@ namespace DQFunnel.BusinessLogic
                 using (_context)
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
-                    var existing = uow.CustomerSettingRepository.GetCustomerSettingByCustomerSettingID(customerSettingID);
-                    existing = objEntity;
-                    existing.ModifyDate = DateTime.Now;
-                    uow.CustomerSettingRepository.Update(existing);
+                    var existing = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(id);
+                    if (existing == null)
+                    {
+                        result = MessageResult(false, "Data not found!");
+                    }
+                    uow.CustomerSettingRepository.UpdateCustomerSetting(objEntity);
                     result = MessageResult(true, "Update Success!");
                 }
             }
@@ -319,27 +321,5 @@ namespace DQFunnel.BusinessLogic
             return result;
 
         }
-
-        public ResultAction Delete(long customerSettingID)
-        {
-            ResultAction result = new ResultAction();
-            try
-            {
-                using (_context)
-                {
-                    IUnitOfWork uow = new UnitOfWork(_context);
-                    var existing = uow.CustomerSettingRepository.GetCustomerSettingByCustomerSettingID(customerSettingID);
-                    uow.CustomerSettingRepository.Delete(existing);
-                    result = MessageResult(true, "Delete Success!");
-                }
-            }
-            catch (Exception ex)
-            {
-                result = MessageResult(false, ex.Message);
-            }
-
-            return result;
-        }
-
     }
 }

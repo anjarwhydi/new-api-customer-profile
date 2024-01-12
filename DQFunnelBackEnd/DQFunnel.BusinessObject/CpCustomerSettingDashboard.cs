@@ -6,7 +6,6 @@ namespace DQFunnel.BusinessObject
 {
     public class CpCustomerSettingDashboard
     {
-        public long CustomerSettingID { get; set; }
         public long CustomerID { get; set; }
         public string CustomerCatageory { get; set; }
         public string CustomerName { get; set; }

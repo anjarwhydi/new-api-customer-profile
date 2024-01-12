@@ -88,26 +88,12 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("{customerSettingID}")]
-        public IActionResult Update(long customerSettingID, CpCustomerSetting objEntity)
+        [HttpPut("{customerID}")]
+        public IActionResult Update(long customerID, CpCustomerSetting objEntity)
         {
             try
             {
-                var result = objCustomerSettingLogic.Update(customerSettingID, objEntity);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpDelete("{customerSettingID}")]
-        public IActionResult Delete(long customerSettingID)
-        {
-            try
-            {
-                var result = objCustomerSettingLogic.Delete(customerSettingID);
+                var result = objCustomerSettingLogic.Update(customerID, objEntity);
                 return Ok(result);
             }
             catch (Exception ex)

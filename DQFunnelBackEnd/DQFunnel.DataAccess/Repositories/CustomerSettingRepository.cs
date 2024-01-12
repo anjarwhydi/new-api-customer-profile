@@ -74,11 +74,30 @@ namespace DQFunnel.DataAccess.Repositories
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
-        public CpCustomerSetting GetCustomerSettingByCustomerSettingID(long customerSettingID)
+        public CpCustomerSetting InsertCustomerSetting(CpCustomerSetting objEntity)
         {
-            var pg = new PredicateGroup { Operator = GroupOperator.And, Predicates = new List<IPredicate>() };
-            pg.Predicates.Add(Predicates.Field<CpCustomerSetting>(c => c.CustomerSettingID, Operator.Eq, customerSettingID));
-            return _context.db.GetList<CpCustomerSetting>(pg).FirstOrDefault();
+            _sql = "[cp].[spInsertCustomerSetting]";
+            var vParams = new DynamicParameters();
+            vParams.Add("@CustomerID", objEntity.CustomerID);
+            vParams.Add("@SalesID", objEntity.SalesID);
+            vParams.Add("@PMOCustomer", objEntity.PMOCustomer);
+            vParams.Add("@CreateUserID", objEntity.CreateUserID);
+            vParams.Add("@ModifyUserID", objEntity.ModifyUserID);
+            var output = _context.db.Execute(_sql, param: vParams, transaction: _transaction, commandTimeout: null, commandType: CommandType.StoredProcedure);
+            return output == 1 ? objEntity : null;
+        }
+        public CpCustomerSetting UpdateCustomerSetting(CpCustomerSetting objEntity)
+        {
+            _sql = "[cp].[spUpdateCustomerSetting]";
+            var vParams = new DynamicParameters();
+            vParams.Add("@CustomerID", objEntity.CustomerID);
+            vParams.Add("@Named", objEntity.Named);
+            vParams.Add("@Shareable", objEntity.Shareable);
+            vParams.Add("@PMOCustomer", objEntity.PMOCustomer);
+            vParams.Add("@ModifyDate", DateTime.Now);
+            vParams.Add("@ModifyUserID", objEntity.ModifyUserID);
+            var output = _context.db.Execute(_sql, param: vParams, transaction: _transaction, commandTimeout: null, commandType: CommandType.StoredProcedure);
+            return output == 1 ? objEntity : null;
         }
         public CpCustomerSetting GetCustomerSettingByCustomerID(long customerID)
         {

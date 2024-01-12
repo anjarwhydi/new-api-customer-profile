@@ -12,7 +12,8 @@ namespace DQFunnel.DataAccess.Interfaces
         List<CpCustomerSettingDashboard> GetCustomerSettingNamedAccount(string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
         List<CpCustomerSettingDashboard> GetCustomerSettingSharebleAccount(string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
         List<CpCustomerSettingDashboard> GetCpCustomerSettingAllAccount(string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
-        CpCustomerSetting GetCustomerSettingByCustomerSettingID(long customerSettingID);
+        CpCustomerSetting InsertCustomerSetting(CpCustomerSetting objEntity);
+        CpCustomerSetting UpdateCustomerSetting(CpCustomerSetting objEntity);
         CpCustomerSetting GetCustomerSettingByCustomerID(long customerID);
     }
 }

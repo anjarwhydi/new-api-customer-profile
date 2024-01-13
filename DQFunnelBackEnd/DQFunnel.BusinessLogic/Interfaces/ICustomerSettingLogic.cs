@@ -8,6 +8,8 @@ namespace DQFunnel.BusinessLogic.Interfaces
 {
     public interface ICustomerSettingLogic
     {
+        ResultAction GetAllCustomerSetting();
+        ResultAction GetCustomerSettingBySalesID(long customerID, long SalesID);
         Req_CustomerSettingNoNamedAccountEnvelope_ViewModel GetCustomerSettingNoNamedAccount(int page, int pageSize, string column, string sorting, string search, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
         CpCustomerSettingEnvelope GetCustomerSettingNamedAccount(int page, int pageSize, string column, string sorting, string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
         CpCustomerSettingEnvelope GetCustomerSettingSharebleAccount(int page, int pageSize, string column, string sorting, string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);

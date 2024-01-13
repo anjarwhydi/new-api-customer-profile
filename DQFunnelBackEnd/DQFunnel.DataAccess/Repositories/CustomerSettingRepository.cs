@@ -94,6 +94,13 @@ namespace DQFunnel.DataAccess.Repositories
             return _context.db.GetList<CpCustomerSetting>(pg).FirstOrDefault();
         }
 
+        public List<CpCustomerSetting> GetCustomerSettingBySalesID(long customerID, long SalesID)
+        {
+            _sql = $"SELECT * FROM OMSPROD.cp.CustomerSetting WHERE CustomerID = {customerID} AND SalesID = {SalesID}";
+            var output = _context.db.Query<CpCustomerSetting>(_sql, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.Text).ToList();
+            return output;
+        }
+
         public CpSalesAssignment GetSalesAssignmentById(long Id)
         {
             var pg = new PredicateGroup { Operator = GroupOperator.And, Predicates = new List<IPredicate>() };

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
+using Dapper;
 using DQFunnel.BusinessObject;
+using DQFunnel.BusinessObject.ViewModel;
 using DQFunnel.DataAccess.Interfaces;
 
 namespace DQFunnel.DataAccess.Repositories
@@ -16,6 +19,13 @@ namespace DQFunnel.DataAccess.Repositories
         {
             this._context = context;
             this._transaction = transaction;
+        }
+
+        public List<Req_CustomerSettingGetSalesData_ViewModel> GetListSales()
+        {
+            _sql = "[cp].[spGetSalesData]";
+            var output = _context.db.Query<Req_CustomerSettingGetSalesData_ViewModel>(_sql, param: null, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            return output;
         }
     }
 }

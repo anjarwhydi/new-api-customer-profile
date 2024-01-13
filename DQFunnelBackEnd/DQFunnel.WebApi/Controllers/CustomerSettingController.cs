@@ -15,11 +15,41 @@ namespace DQFunnel.WebApi.Controllers
     public class CustomerSettingController : ControllerBase
     {
         private ICustomerSettingLogic objCustomerSettingLogic;
+        private ISalesAssignmentLogic objSalesAssignmentLogic;
 
         public CustomerSettingController(IOptions<DatabaseConfiguration> appSettings, IOptions<ApiGatewayConfig> apiGateway)
         {
             string apiGatewayURL = string.Format("{0}:{1}", apiGateway.Value.IP, apiGateway.Value.Port);
             objCustomerSettingLogic = new CustomerSettingLogic(appSettings.Value.OMSProd, apiGatewayURL);
+            objSalesAssignmentLogic = new SalesAssignmentLogic(appSettings.Value.OMSProd, apiGatewayURL);
+        }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.GetAllCustomerSetting();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{customerID}")]
+        public IActionResult GetCustomerSettingBySalesID(long customerID, long SalesID)
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.GetCustomerSettingBySalesID(customerID, SalesID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("GetCustomerSettingNoNamedAccount")]
@@ -108,6 +138,19 @@ namespace DQFunnel.WebApi.Controllers
             try
             {
                 var result = objCustomerSettingLogic.Delete(customerID, salesID, ModifyUserID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetSalesData")]
+        public IActionResult GetSalesData()
+        {
+            try
+            {
+                var result = objSalesAssignmentLogic.GetSalesData();
                 return Ok(result);
             }
             catch (Exception ex)

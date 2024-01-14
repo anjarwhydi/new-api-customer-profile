@@ -158,6 +158,71 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("GetCustomerPICByCustomerID")]
+        public IActionResult GetCustomerPICByCustomerID(long customerID)
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.GetCustomerPICByCustomerID(customerID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
+        [HttpGet("GetBrandSummary")]
+        public IActionResult GetBrandSummary(long customerID)
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.GetBrandSummary(customerID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetServiceSummary")]
+        public IActionResult GetServiceSummary(long customerID)
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.GetServiceSummary(customerID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetCustomerData")]
+        public IActionResult GetCustomerData(long customerID)
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.GetCustomerDataByID(customerID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetProjectHistory")]
+        public IActionResult Get(long customerID)
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.GetProjectHistory(customerID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

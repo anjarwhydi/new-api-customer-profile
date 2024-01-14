@@ -17,5 +17,10 @@ namespace DQFunnel.BusinessLogic.Interfaces
         ResultAction Insert(Req_CustomerSettingInsertCustomerSetting_ViewModel objEntity);
         ResultAction Update(long id, CpCustomerSetting objEntity);
         ResultAction Delete(long customerID, long SalesID, int ModifyUserID);
+        ResultAction GetCustomerPICByCustomerID(long customerID);
+        ResultAction GetBrandSummary(long customerID);
+        ResultAction GetServiceSummary(long customerID);
+        ResultAction GetProjectHistory(long customerID);
+        ResultAction GetCustomerDataByID(long customerID);
     }
 }

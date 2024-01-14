@@ -132,5 +132,49 @@ namespace DQFunnel.DataAccess.Repositories
             }
         }
 
+        public List<Req_CustomerSettingGetPIC_ViewModel> GetCustomerPICByCustomerID(long customerID)
+        {
+            _sql = "[cp].[spGetCustomerPICByCustomerID]";
+            var vParams = new DynamicParameters();
+            vParams.Add("@CustomerID", customerID);
+            var output = _context.db.Query<Req_CustomerSettingGetPIC_ViewModel>(_sql, param: (object)vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            return output;
+        }
+
+        public List<Req_CustomerSettingGetBrandSummary_ViewModel> GetBrandSummary(long customerID)
+        {
+            _sql = "[cp].[spGetBrandSummary]";
+            var vParams = new DynamicParameters();
+            vParams.Add("@CustomerIDC", customerID);
+            var output = _context.db.Query<Req_CustomerSettingGetBrandSummary_ViewModel>(_sql, param: (object)vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            return output;
+        }
+
+        public List<Req_CustomerSettingGetServiceSummary_ViewModel> GetServiceSummary(long customerID)
+        {
+            _sql = "[cp].[spGetServiceSummary]";
+            var vParams = new DynamicParameters();
+            vParams.Add("@CustomerIDC", customerID);
+            var output = _context.db.Query<Req_CustomerSettingGetServiceSummary_ViewModel>(_sql, param: (object)vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            return output;
+        }
+
+        public List<Req_CustomerSettingGetCustomerDataByID_ViewModel> GetCustomerDataByID(long customerID)
+        {
+            _sql = "[cp].[spGetCustomerDataByID]";
+            var vParams = new DynamicParameters();
+            vParams.Add("@CustomerID", customerID);
+            var output = _context.db.Query<Req_CustomerSettingGetCustomerDataByID_ViewModel>(_sql, param: (object)vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            return output;
+        }
+
+        public List<Req_CustomerSettingGetProjectHistory_ViewModel> GetProjectHistory(long customerID)
+        {
+            _sql = "[cp].[spGetProjectHistory]";
+            var vParams = new DynamicParameters();
+            vParams.Add("@CustomerIDC", customerID);
+            var output = _context.db.Query<Req_CustomerSettingGetProjectHistory_ViewModel>(_sql, param: (object)vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            return output;
+        }
     }
 }

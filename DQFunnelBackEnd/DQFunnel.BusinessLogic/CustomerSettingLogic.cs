@@ -532,5 +532,24 @@ namespace DQFunnel.BusinessLogic
             }
             return result;
         }
+        public ResultAction InsertCustomerSetting(CpCustomerSetting objEntity)
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    objEntity.CreateDate = DateTime.Now;
+                    uow.CustomerSettingRepository.Add(objEntity);
+                    result = MessageResult(true, "Success");
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
     }
 }

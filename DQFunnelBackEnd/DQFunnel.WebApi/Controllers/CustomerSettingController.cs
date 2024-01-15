@@ -24,6 +24,19 @@ namespace DQFunnel.WebApi.Controllers
             objSalesAssignmentLogic = new SalesAssignmentLogic(appSettings.Value.OMSProd, apiGatewayURL);
         }
 
+        [HttpPost]
+        public IActionResult Insert(CpCustomerSetting objEntity)
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.InsertCustomerSetting(objEntity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet]
         public IActionResult Get()
         {

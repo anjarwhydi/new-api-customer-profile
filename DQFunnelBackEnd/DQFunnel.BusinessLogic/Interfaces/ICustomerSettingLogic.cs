@@ -22,5 +22,6 @@ namespace DQFunnel.BusinessLogic.Interfaces
         ResultAction GetServiceSummary(long customerID);
         ResultAction GetProjectHistory(long customerID);
         ResultAction GetCustomerDataByID(long customerID);
+        ResultAction InsertCustomerSetting(CpCustomerSetting objEntity);
     }
 }

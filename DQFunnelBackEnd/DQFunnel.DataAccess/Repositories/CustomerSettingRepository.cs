@@ -35,7 +35,7 @@ namespace DQFunnel.DataAccess.Repositories
             return output;
         }
 
-        public List<CpCustomerSettingDashboard> GetCustomerSettingNamedAccount(string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public List<CpCustomerSettingDashboard> GetCustomerSettingNamedAccount(string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             _sql = "[cp].[spGetCustomerSettingNamedAccounts]";
             var vParams = new DynamicParameters();
@@ -43,12 +43,12 @@ namespace DQFunnel.DataAccess.Repositories
             vParams.Add("@PMOCustomer", pmoCustomer);
             vParams.Add("@Blacklist", blacklist);
             vParams.Add("@Holdshipment", holdshipment);
-            vParams.Add("@SalesId", salesID);
+            vParams.Add("@SalesID", salesID);
 
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
-        public List<CpCustomerSettingDashboard> GetCustomerSettingSharebleAccount(string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public List<CpCustomerSettingDashboard> GetCustomerSettingSharebleAccount(string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             _sql = "[cp].[spGetCustomerSettingSharebleAccounts]";
             var vParams = new DynamicParameters();
@@ -56,12 +56,12 @@ namespace DQFunnel.DataAccess.Repositories
             vParams.Add("@PMOCustomer", pmoCustomer);
             vParams.Add("@Blacklist", blacklist);
             vParams.Add("@Holdshipment", holdshipment);
-            vParams.Add("@SalesId", salesID);
+            vParams.Add("@SalesID", salesID);
 
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
-        public List<CpCustomerSettingDashboard> GetCpCustomerSettingAllAccount(string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public List<CpCustomerSettingDashboard> GetCpCustomerSettingAllAccount(string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             _sql = "[cp].[spGetCustomerSettingAllAccounts]";
             var vParams = new DynamicParameters();
@@ -69,7 +69,7 @@ namespace DQFunnel.DataAccess.Repositories
             vParams.Add("@PMOCustomer", pmoCustomer);
             vParams.Add("@Blacklist", blacklist);
             vParams.Add("@Holdshipment", holdshipment);
-            vParams.Add("@SalesId", salesID);
+            vParams.Add("@SalesID", salesID);
 
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;

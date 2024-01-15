@@ -138,7 +138,7 @@ namespace DQFunnel.BusinessLogic
             return result;
         }
 
-        public CpCustomerSettingEnvelope GetCustomerSettingNamedAccount(int page, int pageSize, string column, string sorting, string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public CpCustomerSettingEnvelope GetCustomerSettingNamedAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             CpCustomerSettingEnvelope result = new CpCustomerSettingEnvelope();
 
@@ -198,7 +198,7 @@ namespace DQFunnel.BusinessLogic
             return result;
         }
 
-        public CpCustomerSettingEnvelope GetCustomerSettingSharebleAccount(int page, int pageSize, string column, string sorting, string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public CpCustomerSettingEnvelope GetCustomerSettingSharebleAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             CpCustomerSettingEnvelope result = new CpCustomerSettingEnvelope();
 
@@ -257,7 +257,7 @@ namespace DQFunnel.BusinessLogic
 
             return result;
         }
-        public CpCustomerSettingEnvelope GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public CpCustomerSettingEnvelope GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             CpCustomerSettingEnvelope result = new CpCustomerSettingEnvelope();
 

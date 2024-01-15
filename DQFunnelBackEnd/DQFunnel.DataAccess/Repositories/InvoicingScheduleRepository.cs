@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
+using DapperExtensions;
 using DQFunnel.BusinessObject;
 using DQFunnel.DataAccess.Interfaces;
 
@@ -16,6 +18,13 @@ namespace DQFunnel.DataAccess.Repositories
         {
             this._context = context;
             this._transaction = transaction;
+        }
+
+        public CpInvoicingSchedule GetInvoicingScheduleById(long Id)
+        {
+            var pg = new PredicateGroup { Operator = GroupOperator.And, Predicates = new List<IPredicate>() };
+            pg.Predicates.Add(Predicates.Field<CpInvoicingSchedule>(c => c.IScheduleID, Operator.Eq, Id));
+            return _context.db.GetList<CpInvoicingSchedule>(pg).FirstOrDefault();
         }
     }
 }

@@ -84,6 +84,7 @@ namespace DQFunnel.DataAccess.Repositories
             vParams.Add("@PMOCustomer", objEntity.PMOCustomer);
             vParams.Add("@ModifyDate", DateTime.Now);
             vParams.Add("@ModifyUserID", objEntity.ModifyUserID);
+            vParams.Add("@Status", objEntity.Status);
             var output = _context.db.Execute(_sql, param: vParams, transaction: _transaction, commandTimeout: null, commandType: CommandType.StoredProcedure);
             return output == 1 ? true : false;
         }

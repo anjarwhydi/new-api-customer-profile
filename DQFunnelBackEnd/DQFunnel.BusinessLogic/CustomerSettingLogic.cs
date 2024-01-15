@@ -337,42 +337,28 @@ namespace DQFunnel.BusinessLogic
                     CpCustomerSetting newCustomerSetting;
                     if (objEntity.Status == "approve")
                     {
-                        if (findCustomerSetting == null)
+                        findCustomerSetting.Shareable = true;
+                        findCustomerSetting.Named = false;
+                        findCustomerSetting.ModifyUserID = objEntity.ModifyUserID;
+                        findCustomerSetting.ModifyDate = DateTime.Now;
+                        newCustomerSetting = new CpCustomerSetting
                         {
-                            newCustomerSetting = new CpCustomerSetting
-                            {
-                                CustomerID = existing.CustomerID,
-                                SalesID = existing.SalesID,
-                                CreateDate = DateTime.Now,
-                                CreateUserID = objEntity.ModifyUserID,
-                                PMOCustomer = false,
-                                Named = true,
-                                Shareable = false
-                            };
-                            uow.CustomerSettingRepository.Add(newCustomerSetting);
-                        }
-                        else
-                        {
-                            findCustomerSetting.Shareable = true;
-                            findCustomerSetting.Named = false;
-                            findCustomerSetting.ModifyUserID = objEntity.ModifyUserID;
-                            findCustomerSetting.ModifyDate = DateTime.Now;
-                            newCustomerSetting = new CpCustomerSetting
-                            {
-                                CustomerID = findCustomerSetting.CustomerID,
-                                SalesID = existing.SalesID,
-                                CreateDate = findCustomerSetting.CreateDate,
-                                CreateUserID = findCustomerSetting.CreateUserID,
-                                PMOCustomer = findCustomerSetting.PMOCustomer,
-                                Named = findCustomerSetting.Named,
-                                Shareable = findCustomerSetting.Shareable,
-                                ModifyUserID = findCustomerSetting.ModifyUserID,
-                                ModifyDate = findCustomerSetting.ModifyDate
-                            };
+                            CustomerID = findCustomerSetting.CustomerID,
+                            SalesID = existing.SalesID,
+                            CreateDate = findCustomerSetting.CreateDate,
+                            CreateUserID = findCustomerSetting.CreateUserID,
+                            PMOCustomer = findCustomerSetting.PMOCustomer,
+                            Status = "approve",
+                            Named = findCustomerSetting.Named,
+                            Shareable = findCustomerSetting.Shareable,
+                            RequestedBy = existing.RequstedBy,
+                            RequestedDate = existing.RequstedDate,
+                            ModifyUserID = findCustomerSetting.ModifyUserID,
+                            ModifyDate = findCustomerSetting.ModifyDate
+                        };
 
-                            uow.CustomerSettingRepository.Update(findCustomerSetting);
-                            uow.CustomerSettingRepository.Add(newCustomerSetting);
-                        }
+                        uow.CustomerSettingRepository.Update(findCustomerSetting);
+                        uow.CustomerSettingRepository.Add(newCustomerSetting);
                     }
                     uow.CustomerSettingRepository.ApproveSalesAssignment(objEntity);
                     result = MessageResult(true, "Insert Success!");

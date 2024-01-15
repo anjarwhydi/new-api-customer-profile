@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using System;
 using DQFunnel.BusinessObject;
 using DQFunnel.BusinessObject.ViewModel;
+using DQFunnel.DataAccess.Interfaces;
 
 namespace DQFunnel.WebApi.Controllers
 {
@@ -16,12 +17,20 @@ namespace DQFunnel.WebApi.Controllers
     {
         private ICustomerSettingLogic objCustomerSettingLogic;
         private ISalesAssignmentLogic objSalesAssignmentLogic;
+        private IInvoicingConditionLogic objInvoicingConditionLogic;
+        private IRelatedCustomerLogic objRelatedCustomerLogic;
+        private IInvoicingScheduleLogic objInvoicingScheduleLogic;
+        private IRelatedFileLogic objRelatedFileLogic;
 
         public CustomerSettingController(IOptions<DatabaseConfiguration> appSettings, IOptions<ApiGatewayConfig> apiGateway)
         {
             string apiGatewayURL = string.Format("{0}:{1}", apiGateway.Value.IP, apiGateway.Value.Port);
             objCustomerSettingLogic = new CustomerSettingLogic(appSettings.Value.OMSProd, apiGatewayURL);
             objSalesAssignmentLogic = new SalesAssignmentLogic(appSettings.Value.OMSProd, apiGatewayURL);
+            objInvoicingConditionLogic = new InvoicingConditionLogic(appSettings.Value.OMSProd, apiGatewayURL);
+            objRelatedCustomerLogic = new RelatedCustomerLogic(appSettings.Value.OMSProd, apiGatewayURL);
+            objInvoicingScheduleLogic = new InvoicingScheduleLogic(appSettings.Value.OMSProd, apiGatewayURL);
+            objRelatedFileLogic = new RelatedFileLogic(appSettings.Value.OMSProd, apiGatewayURL);
         }
 
         [HttpPost]
@@ -237,12 +246,25 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("SalesAssignment")]
+        public IActionResult GetSalesAssignment()
+        {
+            try
+            {
+                var result = objSalesAssignmentLogic.GetSalesAssignment();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPost("SalesAssignment")]
         public IActionResult InsertSalesAssignment(CpSalesAssignment objEntity)
         {
             try
             {
-                var result = objSalesAssignmentLogic.Insert(objEntity);
+                var result = objSalesAssignmentLogic.InsertSalesAssignment(objEntity);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -255,7 +277,7 @@ namespace DQFunnel.WebApi.Controllers
         {
             try
             {
-                var result = objSalesAssignmentLogic.Update(SAssignmentID, objEntity);
+                var result = objSalesAssignmentLogic.UpdateSalesAssignment(SAssignmentID, objEntity);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -268,7 +290,215 @@ namespace DQFunnel.WebApi.Controllers
         {
             try
             {
-                var result = objSalesAssignmentLogic.Delete(SAssignmentID);
+                var result = objSalesAssignmentLogic.DeleteSalesAssignment(SAssignmentID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("InvoicingCondition")]
+        public IActionResult GetInvoicingCondition()
+        {
+            try
+            {
+                var result = objInvoicingConditionLogic.GetInvoicingCondition();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("InvoicingCondition")]
+        public IActionResult InsertInvoicingCondition(CpInvoicingCondition objEntity)
+        {
+            try
+            {
+                var result = objInvoicingConditionLogic.InsertInvoicingCondition(objEntity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("InvoicingCondition/{InvoicingConditionID}")]
+        public IActionResult UpdateInvoicingCondition(long InvoicingConditionID, CpInvoicingCondition objEntity)
+        {
+            try
+            {
+                var result = objInvoicingConditionLogic.UpdateInvoicingCondition(InvoicingConditionID, objEntity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("InvoicingCondition/{InvoicingConditionID}")]
+        public IActionResult DeleteInvoicingCondition(long InvoicingConditionID)
+        {
+            try
+            {
+                var result = objInvoicingConditionLogic.DeleteInvoicingCondition(InvoicingConditionID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("InvoicingSchedule")]
+        public IActionResult GetInvoicingSchedule()
+        {
+            try
+            {
+                var result = objInvoicingScheduleLogic.GetInvoicingSchedule();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("InvoicingSchedule")]
+        public IActionResult InsertInvoicingSchedule(CpInvoicingSchedule objEntity)
+        {
+            try
+            {
+                var result = objInvoicingScheduleLogic.InsertInvoicingSchedule(objEntity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("InvoicingSchedule/{InvoicingScheduleID}")]
+        public IActionResult UpdateInvoicingSchedule(long InvoicingScheduleID, CpInvoicingSchedule objEntity)
+        {
+            try
+            {
+                var result = objInvoicingScheduleLogic.UpdateInvoicingSchedule(InvoicingScheduleID, objEntity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("InvoicingSchedule/{InvoicingScheduleID}")]
+        public IActionResult DeleteInvoicingSchedule(long InvoicingScheduleID)
+        {
+            try
+            {
+                var result = objInvoicingScheduleLogic.DeleteInvoicingSchedule(InvoicingScheduleID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("RelatedCustomer")]
+        public IActionResult GetRelatedCustomer()
+        {
+            try
+            {
+                var result = objRelatedCustomerLogic.GetRelatedCustomer();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("RelatedCustomer")]
+        public IActionResult InsertRelatedCustomer(CpRelatedCustomer objEntity)
+        {
+            try
+            {
+                var result = objRelatedCustomerLogic.InsertRelatedCustomer(objEntity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("RelatedCustomer/{RelatedCustomerID}")]
+        public IActionResult UpdateRelatedCustomer(long RelatedCustomerID, CpRelatedCustomer objEntity)
+        {
+            try
+            {
+                var result = objRelatedCustomerLogic.UpdateRelatedCustomer(RelatedCustomerID, objEntity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("RelatedCustomer/{RelatedCustomerID}")]
+        public IActionResult DeleteRelatedCustomer(long RelatedCustomerID)
+        {
+            try
+            {
+                var result = objRelatedCustomerLogic.DeleteRelatedCustomer(RelatedCustomerID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("RelatedFile")]
+        public IActionResult GetRelatedFile()
+        {
+            try
+            {
+                var result = objRelatedFileLogic.GetRelatedFile();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("RelatedFile")]
+        public IActionResult InsertRelatedFile(CpRelatedFile objEntity)
+        {
+            try
+            {
+                var result = objRelatedFileLogic.InsertRelatedFile(objEntity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("RelatedFile/{RelatedFileID}")]
+        public IActionResult UpdateRelatedFile(long RelatedFileID, CpRelatedFile objEntity)
+        {
+            try
+            {
+                var result = objRelatedFileLogic.UpdateRelatedFile(RelatedFileID, objEntity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("RelatedFile/{RelatedFileID}")]
+        public IActionResult DeleteRelatedFile(long RelatedFileID)
+        {
+            try
+            {
+                var result = objRelatedFileLogic.DeleteRelatedFile(RelatedFileID);
                 return Ok(result);
             }
             catch (Exception ex)

@@ -9,16 +9,15 @@ using DQFunnel.DataAccess.Interfaces;
 
 namespace DQFunnel.BusinessLogic
 {
-    public class SalesAssignmentLogic : ISalesAssignmentLogic
+    public class InvoicingConditionLogic : IInvoicingConditionLogic
     {
         private DapperContext _context;
         private IGenericAPI genericAPI;
-        public SalesAssignmentLogic(string connectionstring, string apiGateway)
+        public InvoicingConditionLogic(string connectionstring, string apiGateway)
         {
             this._context = new DapperContext(connectionstring);
             genericAPI = new GenericAPI(apiGateway);
         }
-
         private ResultAction MessageResult(bool bSuccess, string message)
         {
             return MessageResult(bSuccess, message, null);
@@ -37,7 +36,7 @@ namespace DQFunnel.BusinessLogic
             return result;
 
         }
-        public ResultAction GetSalesData()
+        public ResultAction DeleteInvoicingCondition(long Id)
         {
             ResultAction result = new ResultAction();
             try
@@ -45,56 +44,51 @@ namespace DQFunnel.BusinessLogic
                 using (_context)
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
-                    var existing = uow.SalesAssignmentRepository.GetListSales();
-                    result = MessageResult(true, "Success", existing);
-                }
-            }
-            catch (Exception ex)
-            {
-                result = MessageResult(false, ex.Message);
-            }
-            return result;
-        }
-
-        public ResultAction InsertSalesAssignment(CpSalesAssignment objEntity)
-        {
-            ResultAction result = new ResultAction();
-            try
-            {
-                using (_context)
-                {
-                    IUnitOfWork uow = new UnitOfWork(_context);
-                    objEntity.RequstedDate = DateTime.Now;
-                    uow.SalesAssignmentRepository.Add(objEntity);
-                    result = MessageResult(true, "Success");
-                }
-            }
-            catch (Exception ex)
-            {
-                result = MessageResult(false, ex.Message);
-            }
-            return result;
-        }
-
-        public ResultAction UpdateSalesAssignment(long id, CpSalesAssignment objEntity)
-        {
-            ResultAction result = new ResultAction();
-            try
-            {
-                using (_context)
-                {
-                    IUnitOfWork uow = new UnitOfWork(_context);
-                    var existing = uow.SalesAssignmentRepository.GetSalesAssignmentById(id);
+                    var existing = uow.InvoicingConditionRepository.GetInvoicingConditionById(Id);
                     if (existing == null)
                     {
                         return result = MessageResult(false, "Data not found");
                     }
-                    existing.CustomerID = objEntity.CustomerID;
-                    existing.SalesID = objEntity.SalesID;
-                    existing.RequstedBy = objEntity.RequstedBy;
-                    existing.ModifyUserID = objEntity.ModifyUserID;
-                    existing.ModifyDate = DateTime.Now;
-                    uow.SalesAssignmentRepository.Update(existing);
+                    uow.InvoicingConditionRepository.Delete(existing);
+                    result = MessageResult(true, "Delete Success");
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
+
+        public ResultAction GetInvoicingCondition()
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    var existing = uow.InvoicingConditionRepository.GetAll();
+                    result = MessageResult(true, "Success", existing);
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
+
+        public ResultAction InsertInvoicingCondition(CpInvoicingCondition objEntity)
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    objEntity.CreateDate = DateTime.Now;
+                    uow.InvoicingConditionRepository.Add(objEntity);
                     result = MessageResult(true, "Success");
                 }
             }
@@ -105,27 +99,7 @@ namespace DQFunnel.BusinessLogic
             return result;
         }
 
-        public ResultAction DeleteSalesAssignment(long id)
-        {
-            ResultAction result = new ResultAction();
-            try
-            {
-                IUnitOfWork uow = new UnitOfWork(_context);
-                var existing = uow.SalesAssignmentRepository.GetSalesAssignmentById(id);
-                if (existing == null)
-                {
-                    return result = MessageResult(false, "Data not found");
-                }
-                uow.SalesAssignmentRepository.Delete(existing);
-            }
-            catch (Exception ex)
-            {
-                result = MessageResult(false, ex.Message);
-            }
-            return result;
-        }
-
-        public ResultAction GetSalesAssignment()
+        public ResultAction UpdateInvoicingCondition(long Id, CpInvoicingCondition objEntity)
         {
             ResultAction result = new ResultAction();
             try
@@ -133,8 +107,16 @@ namespace DQFunnel.BusinessLogic
                 using (_context)
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
-                    var existing = uow.SalesAssignmentRepository.GetAll();
-                    result = MessageResult(true, "Success", existing);
+                    var existing = uow.InvoicingConditionRepository.GetInvoicingConditionById(Id);
+                    if (existing == null)
+                    {
+                        return result = MessageResult(false, "Data not found");
+                    }
+                    existing = objEntity;
+                    existing.IConditionID = Id;
+                    existing.ModifyDate = DateTime.Now;
+                    uow.InvoicingConditionRepository.Update(existing);
+                    result = MessageResult(true, "Update Success");
                 }
             }
             catch (Exception ex)

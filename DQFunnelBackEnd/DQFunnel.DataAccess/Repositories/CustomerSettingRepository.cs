@@ -35,7 +35,7 @@ namespace DQFunnel.DataAccess.Repositories
             return output;
         }
 
-        public List<CpCustomerSettingDashboard> GetCustomerSettingNamedAccount(string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public List<CpCustomerSettingDashboard> GetCustomerSettingNamedAccount(string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             _sql = "[cp].[spGetCustomerSettingNamedAccounts]";
             var vParams = new DynamicParameters();
@@ -43,12 +43,12 @@ namespace DQFunnel.DataAccess.Repositories
             vParams.Add("@PMOCustomer", pmoCustomer);
             vParams.Add("@Blacklist", blacklist);
             vParams.Add("@Holdshipment", holdshipment);
-            vParams.Add("@SalesName", salesName);
+            vParams.Add("@SalesId", salesID);
 
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
-        public List<CpCustomerSettingDashboard> GetCustomerSettingSharebleAccount(string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public List<CpCustomerSettingDashboard> GetCustomerSettingSharebleAccount(string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             _sql = "[cp].[spGetCustomerSettingSharebleAccounts]";
             var vParams = new DynamicParameters();
@@ -56,12 +56,12 @@ namespace DQFunnel.DataAccess.Repositories
             vParams.Add("@PMOCustomer", pmoCustomer);
             vParams.Add("@Blacklist", blacklist);
             vParams.Add("@Holdshipment", holdshipment);
-            vParams.Add("@SalesName", salesName);
+            vParams.Add("@SalesId", salesID);
 
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
-        public List<CpCustomerSettingDashboard> GetCpCustomerSettingAllAccount(string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public List<CpCustomerSettingDashboard> GetCpCustomerSettingAllAccount(string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             _sql = "[cp].[spGetCustomerSettingAllAccounts]";
             var vParams = new DynamicParameters();
@@ -69,7 +69,7 @@ namespace DQFunnel.DataAccess.Repositories
             vParams.Add("@PMOCustomer", pmoCustomer);
             vParams.Add("@Blacklist", blacklist);
             vParams.Add("@Holdshipment", holdshipment);
-            vParams.Add("@SalesName", salesName);
+            vParams.Add("@SalesId", salesID);
 
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
@@ -94,12 +94,24 @@ namespace DQFunnel.DataAccess.Repositories
             return _context.db.GetList<CpCustomerSetting>(pg).FirstOrDefault();
         }
 
-        public List<CpCustomerSetting> GetCustomerSettingBySalesID(long customerID, long SalesID)
+        public List<CpCustomerSetting> GetCustomerSettingBySalesID(long customerID, long salesID)
         {
-            _sql = $"SELECT * FROM OMSPROD.cp.CustomerSetting WHERE CustomerID = {customerID} AND SalesID = {SalesID}";
-            var output = _context.db.Query<CpCustomerSetting>(_sql, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.Text).ToList();
-            return output;
+            try
+            {
+                _sql = "SELECT * FROM OMSPROD.cp.CustomerSetting WHERE CustomerID = @CustomerID AND SalesID = @SalesID";
+
+                var parameters = new { CustomerID = customerID, SalesID = salesID };
+
+                var output = _context.db.Query<CpCustomerSetting>(_sql, parameters, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.Text).ToList();
+
+                return output;
+            }
+            catch (Exception)
+            {
+                return new List<CpCustomerSetting>();
+            }
         }
+
 
         public CpSalesAssignment GetSalesAssignmentById(long Id)
         {
@@ -108,12 +120,33 @@ namespace DQFunnel.DataAccess.Repositories
             return _context.db.GetList<CpSalesAssignment>(pg).FirstOrDefault();
         }
 
-        public bool ApproveSalesAssignment(long sAssignmentID, int modifyUserID)
+        public bool ApproveSalesAssignment(Req_CustomerSettingInsertCustomerSetting_ViewModel objEntity)
         {
-            _sql = $"UPDATE OMSPROD.cp.SalesAssignment SET Status = 'approved', ModifyUserID = {modifyUserID}, ModifyDate = GETDATE() WHERE SAssignmentID = {sAssignmentID}";
-            var output = _context.db.Query<Req_CustomerSettingInsertCustomerSetting_ViewModel>(_sql, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.Text);
-            return output == null ? false : true;
+            try
+            {
+                _sql = @"UPDATE OMSPROD.cp.SalesAssignment 
+                 SET Status = @Status, 
+                     ModifyUserID = @ModifyUserID, 
+                     ModifyDate = GETDATE() 
+                 WHERE SAssignmentID = @SAssignmentID";
+
+                var parameters = new
+                {
+                    Status = objEntity.Status,
+                    ModifyUserID = objEntity.ModifyUserID,
+                    SAssignmentID = objEntity.SAssignmentID
+                };
+
+                var affectedRows = _context.db.Execute(_sql, parameters, transaction: _transaction, commandTimeout: null, commandType: CommandType.Text);
+
+                return affectedRows > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
+
         public bool DeleteCustomerSettingBySalesID(long customerID, long SalesID)
         {
             try

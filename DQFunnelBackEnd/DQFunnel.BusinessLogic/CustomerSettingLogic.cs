@@ -138,7 +138,7 @@ namespace DQFunnel.BusinessLogic
             return result;
         }
 
-        public CpCustomerSettingEnvelope GetCustomerSettingNamedAccount(int page, int pageSize, string column, string sorting, string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public CpCustomerSettingEnvelope GetCustomerSettingNamedAccount(int page, int pageSize, string column, string sorting, string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             CpCustomerSettingEnvelope result = new CpCustomerSettingEnvelope();
 
@@ -154,7 +154,7 @@ namespace DQFunnel.BusinessLogic
             {
                 IUnitOfWork uow = new UnitOfWork(_context);
 
-                var softwareDashboards = uow.CustomerSettingRepository.GetCustomerSettingNamedAccount(search, salesName, pmoCustomer, blacklist, holdshipment);
+                var softwareDashboards = uow.CustomerSettingRepository.GetCustomerSettingNamedAccount(search, salesID, pmoCustomer, blacklist, holdshipment);
 
                 var resultSoftware = new List<CpCustomerSettingDashboard>();
 
@@ -198,7 +198,7 @@ namespace DQFunnel.BusinessLogic
             return result;
         }
 
-        public CpCustomerSettingEnvelope GetCustomerSettingSharebleAccount(int page, int pageSize, string column, string sorting, string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public CpCustomerSettingEnvelope GetCustomerSettingSharebleAccount(int page, int pageSize, string column, string sorting, string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             CpCustomerSettingEnvelope result = new CpCustomerSettingEnvelope();
 
@@ -214,7 +214,7 @@ namespace DQFunnel.BusinessLogic
             {
                 IUnitOfWork uow = new UnitOfWork(_context);
 
-                var softwareDashboards = uow.CustomerSettingRepository.GetCustomerSettingSharebleAccount(search, salesName, pmoCustomer, blacklist, holdshipment);
+                var softwareDashboards = uow.CustomerSettingRepository.GetCustomerSettingSharebleAccount(search, salesID, pmoCustomer, blacklist, holdshipment);
 
                 var resultSoftware = new List<CpCustomerSettingDashboard>();
 
@@ -257,7 +257,7 @@ namespace DQFunnel.BusinessLogic
 
             return result;
         }
-        public CpCustomerSettingEnvelope GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public CpCustomerSettingEnvelope GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             CpCustomerSettingEnvelope result = new CpCustomerSettingEnvelope();
 
@@ -273,7 +273,7 @@ namespace DQFunnel.BusinessLogic
             {
                 IUnitOfWork uow = new UnitOfWork(_context);
 
-                var softwareDashboards = uow.CustomerSettingRepository.GetCpCustomerSettingAllAccount(search, salesName, pmoCustomer, blacklist, holdshipment);
+                var softwareDashboards = uow.CustomerSettingRepository.GetCpCustomerSettingAllAccount(search, salesID, pmoCustomer, blacklist, holdshipment);
 
                 var resultSoftware = new List<CpCustomerSettingDashboard>();
 
@@ -320,7 +320,7 @@ namespace DQFunnel.BusinessLogic
         public ResultAction Insert(Req_CustomerSettingInsertCustomerSetting_ViewModel objEntity)
         {
             ResultAction result = new ResultAction();
-
+            objEntity.Status = objEntity.Status.ToLower();
             try
             {
                 using (_context)
@@ -335,45 +335,42 @@ namespace DQFunnel.BusinessLogic
 
                     var findCustomerSetting = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(existing.CustomerID);
                     CpCustomerSetting newCustomerSetting;
-
-                    if (findCustomerSetting == null)
+                    if (objEntity.Status == "approve")
                     {
-                        newCustomerSetting = new CpCustomerSetting
+                        if (findCustomerSetting == null)
                         {
-                            CustomerID = existing.CustomerID,
-                            SalesID = existing.SalesID,
-                            CreateDate = DateTime.Now,
-                            CreateUserID = objEntity.ModifyUserID,
-                            Named = true,
-                            Shareable = false
-                        };
-                        uow.CustomerSettingRepository.Add(newCustomerSetting);
-                    }
-                    else
-                    {
-                        newCustomerSetting = new CpCustomerSetting
+                            newCustomerSetting = new CpCustomerSetting
+                            {
+                                CustomerID = existing.CustomerID,
+                                SalesID = existing.SalesID,
+                                CreateDate = DateTime.Now,
+                                CreateUserID = objEntity.ModifyUserID,
+                                Named = true,
+                                Shareable = false
+                            };
+                            uow.CustomerSettingRepository.Add(newCustomerSetting);
+                        }
+                        else
                         {
-                            CustomerID = findCustomerSetting.CustomerID,
-                            SalesID = existing.SalesID,
-                            CreateDate = findCustomerSetting.CreateDate,
-                            CreateUserID = findCustomerSetting.CreateUserID,
-                            PMOCustomer = findCustomerSetting.PMOCustomer,
-                            Named = false,
-                            Shareable = true,
-                            ModifyUserID = objEntity.ModifyUserID,
-                            ModifyDate = DateTime.Now
-                        };
-                        findCustomerSetting.Shareable = true;
-                        findCustomerSetting.Named = false;
-                        uow.CustomerSettingRepository.Update(findCustomerSetting);
-                        uow.CustomerSettingRepository.Add(newCustomerSetting);
+                            newCustomerSetting = new CpCustomerSetting
+                            {
+                                CustomerID = findCustomerSetting.CustomerID,
+                                SalesID = existing.SalesID,
+                                CreateDate = findCustomerSetting.CreateDate,
+                                CreateUserID = findCustomerSetting.CreateUserID,
+                                PMOCustomer = findCustomerSetting.PMOCustomer,
+                                Named = false,
+                                Shareable = true,
+                                ModifyUserID = objEntity.ModifyUserID,
+                                ModifyDate = DateTime.Now
+                            };
+                            findCustomerSetting.Shareable = true;
+                            findCustomerSetting.Named = false;
+                            uow.CustomerSettingRepository.Update(findCustomerSetting);
+                            uow.CustomerSettingRepository.Add(newCustomerSetting);
+                        }
                     }
-
-                    existing.Status = "approved";
-                    existing.ModifyUserID = objEntity.ModifyUserID;
-                    existing.ModifyDate = DateTime.Now;
-                    uow.CustomerSettingRepository.ApproveSalesAssignment(objEntity.SAssignmentID, objEntity.ModifyUserID);
-
+                    uow.CustomerSettingRepository.ApproveSalesAssignment(objEntity);
                     result = MessageResult(true, "Insert Success!");
                 }
             }

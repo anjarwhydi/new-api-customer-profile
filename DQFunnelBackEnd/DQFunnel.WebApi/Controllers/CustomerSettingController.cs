@@ -67,11 +67,11 @@ namespace DQFunnel.WebApi.Controllers
         }
 
         [HttpGet("GetCustomerSettingNamedAccount")]
-        public IActionResult GetCustomerSettingNamedAccount(int page, int pageSize, string column, string sorting, string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public IActionResult GetCustomerSettingNamedAccount(int page, int pageSize, string column, string sorting, string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             try
             {
-                var result = objCustomerSettingLogic.GetCustomerSettingNamedAccount(page, pageSize, column, sorting, search, salesName, pmoCustomer, blacklist, holdshipment);
+                var result = objCustomerSettingLogic.GetCustomerSettingNamedAccount(page, pageSize, column, sorting, search, salesID, pmoCustomer, blacklist, holdshipment);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -81,11 +81,11 @@ namespace DQFunnel.WebApi.Controllers
         }
 
         [HttpGet("GetCustomerSettingSharebleAccount")]
-        public IActionResult GetCustomerSettingSharebleAccount(int page, int pageSize, string column, string sorting, string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public IActionResult GetCustomerSettingSharebleAccount(int page, int pageSize, string column, string sorting, string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             try
             {
-                var result = objCustomerSettingLogic.GetCustomerSettingSharebleAccount(page, pageSize, column, sorting, search, salesName, pmoCustomer, blacklist, holdshipment);
+                var result = objCustomerSettingLogic.GetCustomerSettingSharebleAccount(page, pageSize, column, sorting, search, salesID, pmoCustomer, blacklist, holdshipment);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -94,11 +94,11 @@ namespace DQFunnel.WebApi.Controllers
             }
         }
         [HttpGet("GetCustomerSettingAllAccount")]
-        public IActionResult GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, string salesName, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public IActionResult GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, long salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             try
             {
-                var result = objCustomerSettingLogic.GetCustomerSettingAllAccount(page, pageSize, column, sorting, search, salesName, pmoCustomer, blacklist, holdshipment);
+                var result = objCustomerSettingLogic.GetCustomerSettingAllAccount(page, pageSize, column, sorting, search, salesID, pmoCustomer, blacklist, holdshipment);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -212,11 +212,50 @@ namespace DQFunnel.WebApi.Controllers
             }
         }
         [HttpGet("GetProjectHistory")]
-        public IActionResult Get(long customerID)
+        public IActionResult GetProjectHistory(long customerID)
         {
             try
             {
                 var result = objCustomerSettingLogic.GetProjectHistory(customerID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("SalesAssignment")]
+        public IActionResult InsertSalesAssignment(CpSalesAssignment objEntity)
+        {
+            try
+            {
+                var result = objSalesAssignmentLogic.Insert(objEntity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("SalesAssignment/{SAssignmentID}")]
+        public IActionResult UpdateSalesAssignment(long SAssignmentID, CpSalesAssignment objEntity)
+        {
+            try
+            {
+                var result = objSalesAssignmentLogic.Update(SAssignmentID, objEntity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("SalesAssignment/{SAssignmentID}")]
+        public IActionResult DeleteSalesAssignment(long SAssignmentID)
+        {
+            try
+            {
+                var result = objSalesAssignmentLogic.Delete(SAssignmentID);
                 return Ok(result);
             }
             catch (Exception ex)

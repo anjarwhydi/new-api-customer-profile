@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using Dapper;
+using DapperExtensions;
 using DQFunnel.BusinessObject;
 using DQFunnel.BusinessObject.ViewModel;
 using DQFunnel.DataAccess.Interfaces;
@@ -26,6 +27,12 @@ namespace DQFunnel.DataAccess.Repositories
             _sql = "[cp].[spGetSalesData]";
             var output = _context.db.Query<Req_CustomerSettingGetSalesData_ViewModel>(_sql, param: null, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
+        }
+        public CpSalesAssignment GetSalesAssignmentById(long Id)
+        {
+            var pg = new PredicateGroup { Operator = GroupOperator.And, Predicates = new List<IPredicate>() };
+            pg.Predicates.Add(Predicates.Field<CpSalesAssignment>(c => c.SAssignmentID, Operator.Eq, Id));
+            return _context.db.GetList<CpSalesAssignment>(pg).FirstOrDefault();
         }
     }
 }

@@ -55,5 +55,74 @@ namespace DQFunnel.BusinessLogic
             }
             return result;
         }
+
+        public ResultAction Insert(CpSalesAssignment objEntity)
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    objEntity.RequstedDate = DateTime.Now;
+                    uow.SalesAssignmentRepository.Add(objEntity);
+                    result = MessageResult(true, "Success");
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
+
+        public ResultAction Update(long id, CpSalesAssignment objEntity)
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    var existing = uow.SalesAssignmentRepository.GetSalesAssignmentById(id);
+                    if (existing == null)
+                    {
+                        return result = MessageResult(false, "Data not found");
+                    }
+                    existing.CustomerID = objEntity.CustomerID;
+                    existing.SalesID = objEntity.SalesID;
+                    existing.RequstedBy = objEntity.RequstedBy;
+                    existing.ModifyUserID = objEntity.ModifyUserID;
+                    existing.ModifyDate = DateTime.Now;
+                    uow.SalesAssignmentRepository.Update(existing);
+                    result = MessageResult(true, "Success");
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
+
+        public ResultAction Delete(long id)
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                IUnitOfWork uow = new UnitOfWork(_context);
+                var existing = uow.SalesAssignmentRepository.GetSalesAssignmentById(id);
+                if (existing == null)
+                {
+                    return result = MessageResult(false, "Data not found");
+                }
+                uow.SalesAssignmentRepository.Delete(existing);
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
     }
 }

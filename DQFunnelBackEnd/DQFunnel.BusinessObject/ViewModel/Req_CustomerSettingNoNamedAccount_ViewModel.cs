@@ -6,7 +6,6 @@ namespace DQFunnel.BusinessObject.ViewModel
 {
     public class Req_CustomerSettingNoNamedAccount_ViewModel
     {
-        public long CustomerSettingID { get; set; }
         public long CustomerID { get; set; }
         public string CustomerName { get; set; }
         public string CustomerAddress { get; set; }

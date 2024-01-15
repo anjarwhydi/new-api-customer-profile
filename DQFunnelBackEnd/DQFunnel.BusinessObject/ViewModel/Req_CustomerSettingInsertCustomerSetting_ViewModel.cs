@@ -8,5 +8,6 @@ namespace DQFunnel.BusinessObject.ViewModel
     {
         public long SAssignmentID { get; set; }
         public int ModifyUserID { get; set; }
+        public string Status { get; set; }
     }
 }

@@ -345,6 +345,7 @@ namespace DQFunnel.BusinessLogic
                                 SalesID = existing.SalesID,
                                 CreateDate = DateTime.Now,
                                 CreateUserID = objEntity.ModifyUserID,
+                                PMOCustomer = false,
                                 Named = true,
                                 Shareable = false
                             };
@@ -352,6 +353,10 @@ namespace DQFunnel.BusinessLogic
                         }
                         else
                         {
+                            findCustomerSetting.Shareable = true;
+                            findCustomerSetting.Named = false;
+                            findCustomerSetting.ModifyUserID = objEntity.ModifyUserID;
+                            findCustomerSetting.ModifyDate = DateTime.Now;
                             newCustomerSetting = new CpCustomerSetting
                             {
                                 CustomerID = findCustomerSetting.CustomerID,
@@ -359,13 +364,12 @@ namespace DQFunnel.BusinessLogic
                                 CreateDate = findCustomerSetting.CreateDate,
                                 CreateUserID = findCustomerSetting.CreateUserID,
                                 PMOCustomer = findCustomerSetting.PMOCustomer,
-                                Named = false,
-                                Shareable = true,
-                                ModifyUserID = objEntity.ModifyUserID,
-                                ModifyDate = DateTime.Now
+                                Named = findCustomerSetting.Named,
+                                Shareable = findCustomerSetting.Shareable,
+                                ModifyUserID = findCustomerSetting.ModifyUserID,
+                                ModifyDate = findCustomerSetting.ModifyDate
                             };
-                            findCustomerSetting.Shareable = true;
-                            findCustomerSetting.Named = false;
+
                             uow.CustomerSettingRepository.Update(findCustomerSetting);
                             uow.CustomerSettingRepository.Add(newCustomerSetting);
                         }
@@ -541,6 +545,8 @@ namespace DQFunnel.BusinessLogic
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
                     objEntity.CreateDate = DateTime.Now;
+                    objEntity.Named = true;
+                    objEntity.Shareable = false;
                     uow.CustomerSettingRepository.Add(objEntity);
                     result = MessageResult(true, "Success");
                 }

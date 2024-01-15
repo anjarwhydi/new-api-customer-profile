@@ -9,17 +9,10 @@ namespace DQFunnel.BusinessObject
         public long SAssignmentID { get; set; }
         public long CustomerID { get; set; }
         public long SalesID { get; set; }
-        public Status Status { get; set; }
+        public string Status { get; set; }
         public int RequstedBy { get; set; }
         public DateTime RequstedDate { get; set; }
         public int ModifyUserID { get; set; }
         public DateTime ModifyDate { get; set; }
-    }
-
-    public enum Status
-    {
-        rejected = 0,
-        waiting = 1,
-        approved = 2
     }
 }

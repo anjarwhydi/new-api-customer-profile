@@ -23,5 +23,6 @@ namespace DQFunnel.DataAccess.Interfaces
         List<Req_CustomerSettingGetServiceSummary_ViewModel> GetServiceSummary(long customerID);
         List<Req_CustomerSettingGetCustomerDataByID_ViewModel> GetCustomerDataByID(long customerID);
         List<Req_CustomerSettingGetProjectHistory_ViewModel> GetProjectHistory(long customerID);
+        List<Req_CustomerSettingGetSalesData_ViewModel> GetListSales();
     }
 }

@@ -16,13 +16,11 @@ namespace DQFunnel.WebApi.Controllers
     public class CustomerSettingController : ControllerBase
     {
         private ICustomerSettingLogic objCustomerSettingLogic;
-        private ISalesAssignmentLogic objSalesAssignmentLogic;
 
         public CustomerSettingController(IOptions<DatabaseConfiguration> appSettings, IOptions<ApiGatewayConfig> apiGateway)
         {
             string apiGatewayURL = string.Format("{0}:{1}", apiGateway.Value.IP, apiGateway.Value.Port);
             objCustomerSettingLogic = new CustomerSettingLogic(appSettings.Value.OMSProd, apiGatewayURL);
-            objSalesAssignmentLogic = new SalesAssignmentLogic(appSettings.Value.OMSProd, apiGatewayURL);
         }
 
         [HttpPost]
@@ -164,7 +162,7 @@ namespace DQFunnel.WebApi.Controllers
         {
             try
             {
-                var result = objSalesAssignmentLogic.GetSalesData();
+                var result = objCustomerSettingLogic.GetSalesData();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -231,58 +229,6 @@ namespace DQFunnel.WebApi.Controllers
             try
             {
                 var result = objCustomerSettingLogic.GetProjectHistory(customerID);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpGet("SalesAssignment")]
-        public IActionResult GetSalesAssignment()
-        {
-            try
-            {
-                var result = objSalesAssignmentLogic.GetSalesAssignment();
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpPost("SalesAssignment")]
-        public IActionResult InsertSalesAssignment(CpSalesAssignment objEntity)
-        {
-            try
-            {
-                var result = objSalesAssignmentLogic.InsertSalesAssignment(objEntity);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpPut("SalesAssignment/{SAssignmentID}")]
-        public IActionResult UpdateSalesAssignment(long SAssignmentID, CpSalesAssignment objEntity)
-        {
-            try
-            {
-                var result = objSalesAssignmentLogic.UpdateSalesAssignment(SAssignmentID, objEntity);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpDelete("SalesAssignment/{SAssignmentID}")]
-        public IActionResult DeleteSalesAssignment(long SAssignmentID)
-        {
-            try
-            {
-                var result = objSalesAssignmentLogic.DeleteSalesAssignment(SAssignmentID);
                 return Ok(result);
             }
             catch (Exception ex)

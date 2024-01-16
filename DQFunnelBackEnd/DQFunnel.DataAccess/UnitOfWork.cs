@@ -48,7 +48,5 @@ namespace DQFunnel.DataAccess
         public IRelatedCustomerRepository RelatedCustomerRepository => relatedCustomerRepository ?? (relatedCustomerRepository = new RelatedCustomerRepository(_transaction, _context));
         public IRelatedFileRepository relatedFileRepository;
         public IRelatedFileRepository RelatedFileRepository => relatedFileRepository ?? (relatedFileRepository = new RelatedFileRepository(_transaction, _context));
-        public ISalesAssignmentRepository salesAssignmentRepository;
-        public ISalesAssignmentRepository SalesAssignmentRepository => salesAssignmentRepository ?? (salesAssignmentRepository = new SalesAssignmentRepository(_transaction, _context));
     }
 }

@@ -552,5 +552,23 @@ namespace DQFunnel.BusinessLogic
             }
             return result;
         }
+        public ResultAction GetSalesData()
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    var existing = uow.CustomerSettingRepository.GetListSales();
+                    result = MessageResult(true, "Success", existing);
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
     }
 }

@@ -191,5 +191,11 @@ namespace DQFunnel.DataAccess.Repositories
             var output = _context.db.Query<Req_CustomerSettingGetProjectHistory_ViewModel>(_sql, param: (object)vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
+        public List<Req_CustomerSettingGetSalesData_ViewModel> GetListSales()
+        {
+            _sql = "[cp].[spGetSalesData]";
+            var output = _context.db.Query<Req_CustomerSettingGetSalesData_ViewModel>(_sql, param: null, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            return output;
+        }
     }
 }

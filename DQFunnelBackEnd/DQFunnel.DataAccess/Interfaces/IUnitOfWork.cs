@@ -19,7 +19,6 @@ namespace DQFunnel.DataAccess.Interfaces
         IInvoicingScheduleRepository InvoicingScheduleRepository { get; }
         IRelatedCustomerRepository RelatedCustomerRepository { get; }
         IRelatedFileRepository RelatedFileRepository { get; }
-        ISalesAssignmentRepository SalesAssignmentRepository { get; }
 
     }
 }

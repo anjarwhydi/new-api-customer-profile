@@ -19,7 +19,8 @@ namespace DQFunnel.WebApi.Controllers
             string apiGatewayURL = string.Format("{0}:{1}", apiGateway.Value.IP, apiGateway.Value.Port);
             objRelatedCustomerLogic = new RelatedCustomerLogic(appSettings.Value.OMSProd, apiGatewayURL);
         }
-        [HttpGet("RelatedCustomer")]
+
+        [HttpGet]
         public IActionResult GetRelatedCustomer()
         {
             try
@@ -33,7 +34,7 @@ namespace DQFunnel.WebApi.Controllers
             }
         }
 
-        [HttpPost("RelatedCustomer")]
+        [HttpPost]
         public IActionResult InsertRelatedCustomer(CpRelatedCustomer objEntity)
         {
             try
@@ -46,7 +47,7 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("RelatedCustomer/{RelatedCustomerID}")]
+        [HttpPut("{RelatedCustomerID}")]
         public IActionResult UpdateRelatedCustomer(long RelatedCustomerID, CpRelatedCustomer objEntity)
         {
             try
@@ -59,12 +60,25 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete("RelatedCustomer/{RelatedCustomerID}")]
+        [HttpDelete("{RelatedCustomerID}")]
         public IActionResult DeleteRelatedCustomer(long RelatedCustomerID)
         {
             try
             {
                 var result = objRelatedCustomerLogic.DeleteRelatedCustomer(RelatedCustomerID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetRelatedCustomerByCustomerID")]
+        public IActionResult GetRelatedCustomerByCustomerID(long customerID)
+        {
+            try
+            {
+                var result = objRelatedCustomerLogic.GetRelatedCustomerByCustomerID(customerID);
                 return Ok(result);
             }
             catch (Exception ex)

@@ -8,5 +8,6 @@ namespace DQFunnel.DataAccess.Interfaces
     public interface IInvoicingConditionRepository : IRepository<CpInvoicingCondition>
     {
         CpInvoicingCondition GetInvoicingConditionById(long Id);
+        List<CpInvoicingCondition> GetInvoicingConditionByCustomerID(long customerID);
     }
 }

@@ -125,5 +125,23 @@ namespace DQFunnel.BusinessLogic
             }
             return result;
         }
+        public ResultAction GetRelatedFileByCustomerID(long customerID)
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    var existing = uow.RelatedFileRepository.GetRelatedFileByCustomerID(customerID);
+                    result = MessageResult(true, "Success", existing);
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
     }
 }

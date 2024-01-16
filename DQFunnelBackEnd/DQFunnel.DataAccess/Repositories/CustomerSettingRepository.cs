@@ -84,6 +84,7 @@ namespace DQFunnel.DataAccess.Repositories
             vParams.Add("@PMOCustomer", objEntity.PMOCustomer);
             vParams.Add("@ModifyDate", DateTime.Now);
             vParams.Add("@ModifyUserID", objEntity.ModifyUserID);
+            vParams.Add("@Category", objEntity.CustomerCategory);
             vParams.Add("@Status", objEntity.Status);
             var output = _context.db.Execute(_sql, param: vParams, transaction: _transaction, commandTimeout: null, commandType: CommandType.StoredProcedure);
             return output == 1 ? true : false;
@@ -195,6 +196,37 @@ namespace DQFunnel.DataAccess.Repositories
         {
             _sql = "[cp].[spGetSalesData]";
             var output = _context.db.Query<Req_CustomerSettingGetSalesData_ViewModel>(_sql, param: null, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            return output;
+        }
+
+        public List<Req_CustomerSettingGetConfigItem_ViewModel> GetConfigItem(long customerID)
+        {
+            _sql = "[cp].[spGetConfigItem]";
+            var vParams = new DynamicParameters();
+            vParams.Add("@CustomerID", customerID);
+            var output = _context.db.Query<Req_CustomerSettingGetConfigItem_ViewModel>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            return output;
+        }
+        public List<Req_CustomerSettingGetCollectionHistory_ViewModel> GetCollectionHistory(long customerID)
+        {
+            _sql = "[cp].[spGetCustomerCollectionsHistory]";
+            var vParams = new DynamicParameters();
+            vParams.Add("@CustomerID", customerID);
+            var output = _context.db.Query<Req_CustomerSettingGetCollectionHistory_ViewModel>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            return output;
+        }
+        public List<Req_CustomerSettingGetSalesData_ViewModel> GetSalesByName(string salesName)
+        {
+            _sql = "[cp].[spSearchSalesName]";
+            var vParams = new DynamicParameters();
+            vParams.Add("@Search", salesName);
+            var output = _context.db.Query<Req_CustomerSettingGetSalesData_ViewModel>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            return output;
+        }
+        public List<Req_CustomerSettingGetCustomerCategory_ViewModel> GetCustomerCategory()
+        {
+            _sql = "[cp].[spGetCustomerCategory]";
+            var output = _context.db.Query<Req_CustomerSettingGetCustomerCategory_ViewModel>(_sql, param: null, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
     }

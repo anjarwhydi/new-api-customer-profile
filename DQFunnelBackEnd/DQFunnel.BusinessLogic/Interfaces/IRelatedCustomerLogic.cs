@@ -11,5 +11,6 @@ namespace DQFunnel.BusinessLogic.Interfaces
         ResultAction InsertRelatedCustomer(CpRelatedCustomer objEntity);
         ResultAction UpdateRelatedCustomer(long Id, CpRelatedCustomer objEntity);
         ResultAction DeleteRelatedCustomer(long Id);
+        ResultAction GetRelatedCustomerByCustomerID(long customerID);
     }
 }

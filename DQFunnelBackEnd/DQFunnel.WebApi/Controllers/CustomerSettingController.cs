@@ -236,5 +236,57 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("GetConfigItem")]
+        public IActionResult GetConfigItem(long customerID)
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.GetConfigItem(customerID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetCollectionHistory")]
+        public IActionResult GetCollectionHistory(long customerID)
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.GetCollectionHistory(customerID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetSalesDataByName")]
+        public IActionResult GetSalesDataByName(string salesName)
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.GetSalesByName(salesName);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetCustomerCategory")]
+        public IActionResult GetCustomerCategory()
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.GetCustomerCategory();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

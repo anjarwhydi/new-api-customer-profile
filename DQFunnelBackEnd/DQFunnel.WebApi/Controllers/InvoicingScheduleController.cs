@@ -19,7 +19,7 @@ namespace DQFunnel.WebApi.Controllers
             string apiGatewayURL = string.Format("{0}:{1}", apiGateway.Value.IP, apiGateway.Value.Port);
             objInvoicingScheduleLogic = new InvoicingScheduleLogic(appSettings.Value.OMSProd, apiGatewayURL);
         }
-        [HttpGet("InvoicingSchedule")]
+        [HttpGet]
         public IActionResult GetInvoicingSchedule()
         {
             try
@@ -32,7 +32,7 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost("InvoicingSchedule")]
+        [HttpPost]
         public IActionResult InsertInvoicingSchedule(CpInvoicingSchedule objEntity)
         {
             try
@@ -45,7 +45,7 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("InvoicingSchedule/{InvoicingScheduleID}")]
+        [HttpPut("{InvoicingScheduleID}")]
         public IActionResult UpdateInvoicingSchedule(long InvoicingScheduleID, CpInvoicingSchedule objEntity)
         {
             try
@@ -58,12 +58,25 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete("InvoicingSchedule/{InvoicingScheduleID}")]
+        [HttpDelete("{InvoicingScheduleID}")]
         public IActionResult DeleteInvoicingSchedule(long InvoicingScheduleID)
         {
             try
             {
                 var result = objInvoicingScheduleLogic.DeleteInvoicingSchedule(InvoicingScheduleID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetInvoicingScheduleByCustomerID")]
+        public IActionResult GetInvoicingScheduleByCustomerID(long customerID)
+        {
+            try
+            {
+                var result = objInvoicingScheduleLogic.GetInvoicingScheduleByCustomerID(customerID);
                 return Ok(result);
             }
             catch (Exception ex)

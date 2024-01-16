@@ -12,5 +12,6 @@ namespace DQFunnel.BusinessLogic.Interfaces
         ResultAction InsertInvoicingCondition(CpInvoicingCondition objEntity);
         ResultAction UpdateInvoicingCondition(long Id, CpInvoicingCondition objEntity);
         ResultAction DeleteInvoicingCondition(long Id);
+        ResultAction GetInvoicingConditionByCustomerID(long customerID);
     }
 }

@@ -332,6 +332,7 @@ namespace DQFunnel.BusinessLogic
                     {
                         newCustomerSetting.CustomerID = objEntity.CustomerID;
                         newCustomerSetting.SalesID = objEntity.SalesID;
+                        newCustomerSetting.CustomerCategory = null;
                         newCustomerSetting.Named = true;
                         newCustomerSetting.Shareable = false;
                         newCustomerSetting.Status = "approve";
@@ -353,6 +354,7 @@ namespace DQFunnel.BusinessLogic
 
                         newCustomerSetting.CustomerID = findCustomerSetting.CustomerID;
                         newCustomerSetting.SalesID = objEntity.SalesID;
+                        newCustomerSetting.CustomerCategory = findCustomerSetting.CustomerCategory;
                         newCustomerSetting.CreateDate = findCustomerSetting.CreateDate;
                         newCustomerSetting.CreateUserID = findCustomerSetting.CreateUserID;
                         newCustomerSetting.PMOCustomer = findCustomerSetting.PMOCustomer;
@@ -561,6 +563,78 @@ namespace DQFunnel.BusinessLogic
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
                     var existing = uow.CustomerSettingRepository.GetListSales();
+                    result = MessageResult(true, "Success", existing);
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
+        public ResultAction GetCustomerCategory()
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    var existing = uow.CustomerSettingRepository.GetCustomerCategory();
+                    result = MessageResult(true, "Success", existing);
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
+        public ResultAction GetConfigItem(long customerID)
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    var existing = uow.CustomerSettingRepository.GetConfigItem(customerID);
+                    result = MessageResult(true, "Success", existing);
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
+        public ResultAction GetCollectionHistory(long customerID)
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    var existing = uow.CustomerSettingRepository.GetCollectionHistory(customerID);
+                    result = MessageResult(true, "Success", existing);
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
+        public ResultAction GetSalesByName(string salesName)
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    var existing = uow.CustomerSettingRepository.GetSalesByName(salesName);
                     result = MessageResult(true, "Success", existing);
                 }
             }

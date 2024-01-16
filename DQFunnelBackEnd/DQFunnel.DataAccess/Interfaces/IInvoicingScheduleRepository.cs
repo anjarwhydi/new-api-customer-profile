@@ -8,5 +8,6 @@ namespace DQFunnel.DataAccess.Interfaces
     public interface IInvoicingScheduleRepository : IRepository<CpInvoicingSchedule>
     {
         CpInvoicingSchedule GetInvoicingScheduleById(long Id);
+        List<CpInvoicingSchedule> GetInvoicingScheduleByCustomerID(long customerID);
     }
 }

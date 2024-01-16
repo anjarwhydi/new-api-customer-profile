@@ -19,7 +19,7 @@ namespace DQFunnel.WebApi.Controllers
             string apiGatewayURL = string.Format("{0}:{1}", apiGateway.Value.IP, apiGateway.Value.Port);
             objInvoicingConditionLogic = new InvoicingConditionLogic(appSettings.Value.OMSProd, apiGatewayURL);
         }
-        [HttpGet("InvoicingCondition")]
+        [HttpGet]
         public IActionResult GetInvoicingCondition()
         {
             try
@@ -32,7 +32,7 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost("InvoicingCondition")]
+        [HttpPost]
         public IActionResult InsertInvoicingCondition(CpInvoicingCondition objEntity)
         {
             try
@@ -45,7 +45,7 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("InvoicingCondition/{InvoicingConditionID}")]
+        [HttpPut("{InvoicingConditionID}")]
         public IActionResult UpdateInvoicingCondition(long InvoicingConditionID, CpInvoicingCondition objEntity)
         {
             try
@@ -58,12 +58,25 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete("InvoicingCondition/{InvoicingConditionID}")]
+        [HttpDelete("{InvoicingConditionID}")]
         public IActionResult DeleteInvoicingCondition(long InvoicingConditionID)
         {
             try
             {
                 var result = objInvoicingConditionLogic.DeleteInvoicingCondition(InvoicingConditionID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetInvoicingConditionByCustomerID")]
+        public IActionResult GetInvoicingConditionByCustomerID(long customerID)
+        {
+            try
+            {
+                var result = objInvoicingConditionLogic.GetInvoicingConditionByCustomerID(customerID);
                 return Ok(result);
             }
             catch (Exception ex)

@@ -49,7 +49,7 @@ namespace DQFunnel.BusinessLogic
                     {
                         return result = MessageResult(false, "Data not found");
                     }
-                    uow.RelatedCustomerRepository.Delete(existing);
+                    uow.RelatedCustomerRepository.DeleteRelatedCustomer(Id);
                     result = MessageResult(true, "Delete Success");
                 }
             }
@@ -88,7 +88,17 @@ namespace DQFunnel.BusinessLogic
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
                     objEntity.CreateDate = DateTime.Now;
+                    objEntity.ModifyDate = null;
+                    objEntity.ModifyUserID = null;
                     uow.RelatedCustomerRepository.Add(objEntity);
+
+                    var temp = objEntity;
+                    CpRelatedCustomer newData = new CpRelatedCustomer();
+                    newData = objEntity;
+                    newData.CustomerID = temp.RelatedCustomerID;
+                    newData.RelatedCustomerID = temp.CustomerID;
+
+                    uow.RelatedCustomerRepository.Add(newData);
                     result = MessageResult(true, "Success");
                 }
             }
@@ -125,5 +135,24 @@ namespace DQFunnel.BusinessLogic
             }
             return result;
         }
+        public ResultAction GetRelatedCustomerByCustomerID(long customerID)
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    var existing = uow.RelatedCustomerRepository.GetRelatedCustomerByCustomerID(customerID);
+                    result = MessageResult(true, "Success", existing);
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
+
     }
 }

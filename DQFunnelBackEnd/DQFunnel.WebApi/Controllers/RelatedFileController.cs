@@ -19,7 +19,7 @@ namespace DQFunnel.WebApi.Controllers
             string apiGatewayURL = string.Format("{0}:{1}", apiGateway.Value.IP, apiGateway.Value.Port);
             objRelatedFileLogic = new RelatedFileLogic(appSettings.Value.OMSProd, apiGatewayURL);
         }
-        [HttpGet("RelatedFile")]
+        [HttpGet]
         public IActionResult GetRelatedFile()
         {
             try
@@ -32,7 +32,7 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost("RelatedFile")]
+        [HttpPost]
         public IActionResult InsertRelatedFile(CpRelatedFile objEntity)
         {
             try
@@ -45,7 +45,7 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("RelatedFile/{RelatedFileID}")]
+        [HttpPut("{RelatedFileID}")]
         public IActionResult UpdateRelatedFile(long RelatedFileID, CpRelatedFile objEntity)
         {
             try
@@ -58,12 +58,25 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete("RelatedFile/{RelatedFileID}")]
+        [HttpDelete("{RelatedFileID}")]
         public IActionResult DeleteRelatedFile(long RelatedFileID)
         {
             try
             {
                 var result = objRelatedFileLogic.DeleteRelatedFile(RelatedFileID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetRelatedFileByCustomerID")]
+        public IActionResult GetRelatedFileByCustomerID(long customerID)
+        {
+            try
+            {
+                var result = objRelatedFileLogic.GetRelatedFileByCustomerID(customerID);
                 return Ok(result);
             }
             catch (Exception ex)

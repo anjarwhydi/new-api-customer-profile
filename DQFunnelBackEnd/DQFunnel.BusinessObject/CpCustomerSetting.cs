@@ -9,6 +9,7 @@ namespace DQFunnel.BusinessObject
     {
         public long CustomerSettingID { get; set; }
         public long CustomerID { get; set; }
+        public string CustomerCategory { get; set; }
         public long SalesID { get; set; }
         public bool Shareable { get; set; }
         public bool Named { get; set; }

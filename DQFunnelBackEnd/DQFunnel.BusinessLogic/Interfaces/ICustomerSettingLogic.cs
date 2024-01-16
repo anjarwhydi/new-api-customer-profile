@@ -24,5 +24,9 @@ namespace DQFunnel.BusinessLogic.Interfaces
         ResultAction GetProjectHistory(long customerID);
         ResultAction GetCustomerDataByID(long customerID);
         ResultAction GetSalesData();
+        ResultAction GetConfigItem(long customerID);
+        ResultAction GetCollectionHistory(long customerID);
+        ResultAction GetSalesByName(string salesName);
+        ResultAction GetCustomerCategory();
     }
 }

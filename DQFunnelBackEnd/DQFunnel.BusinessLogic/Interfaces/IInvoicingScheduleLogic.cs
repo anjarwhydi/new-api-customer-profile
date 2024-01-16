@@ -11,5 +11,6 @@ namespace DQFunnel.BusinessLogic.Interfaces
         ResultAction InsertInvoicingSchedule(CpInvoicingSchedule objEntity);
         ResultAction UpdateInvoicingSchedule(long Id, CpInvoicingSchedule objEntity);
         ResultAction DeleteInvoicingSchedule(long Id);
+        ResultAction GetInvoicingScheduleByCustomerID(long customerID);
     }
 }

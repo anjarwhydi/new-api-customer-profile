@@ -4,14 +4,14 @@ using System.Text;
 
 namespace DQFunnel.BusinessObject.ViewModel
 {
-    public class Req_CustomerSettingGetCustomerDataByID_ViewModel
+    public class Req_CustomerSettingGetRelatedCustomer_ViewModel
     {
+        public long RCustomerID { get; set; }
         public long CustomerID { get; set; }
-        public string CustomerCategory { get; set; }
-        public string CustomerName { get; set; }
-        public string CustomerAddress { get; set; }
+        public string RelatedCustomerName { get; set; }
+        public string Address { get; set; }
+        public float AvgAR { get; set; }
         public bool Blacklist { get; set; }
         public bool Holdshipment { get; set; }
-        public float AvgAR { get; set; }
     }
 }

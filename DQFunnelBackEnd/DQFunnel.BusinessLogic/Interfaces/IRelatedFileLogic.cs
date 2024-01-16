@@ -11,5 +11,6 @@ namespace DQFunnel.BusinessLogic.Interfaces
         ResultAction InsertRelatedFile(CpRelatedFile objEntity);
         ResultAction UpdateRelatedFile(long Id, CpRelatedFile objEntity);
         ResultAction DeleteRelatedFile(long Id);
+        ResultAction GetRelatedFileByCustomerID(long customerID);
     }
 }

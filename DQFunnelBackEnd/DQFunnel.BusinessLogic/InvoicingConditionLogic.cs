@@ -125,5 +125,24 @@ namespace DQFunnel.BusinessLogic
             }
             return result;
         }
+
+        public ResultAction GetInvoicingConditionByCustomerID(long customerID)
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    var existing = uow.InvoicingConditionRepository.GetInvoicingConditionByCustomerID(customerID);
+                    result = MessageResult(true, "Success", existing);
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
     }
 }

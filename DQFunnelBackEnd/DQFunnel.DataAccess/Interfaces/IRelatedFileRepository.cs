@@ -8,5 +8,6 @@ namespace DQFunnel.DataAccess.Interfaces
     public interface IRelatedFileRepository : IRepository<CpRelatedFile>
     {
         CpRelatedFile GetRelatedFileById(long Id);
+        List<CpRelatedFile> GetRelatedFileByCustomerID(long customerID);
     }
 }

@@ -26,5 +26,11 @@ namespace DQFunnel.DataAccess.Repositories
             pg.Predicates.Add(Predicates.Field<CpInvoicingSchedule>(c => c.IScheduleID, Operator.Eq, Id));
             return _context.db.GetList<CpInvoicingSchedule>(pg).FirstOrDefault();
         }
+        public List<CpInvoicingSchedule> GetInvoicingScheduleByCustomerID(long customerID)
+        {
+            var pg = new PredicateGroup { Operator = GroupOperator.And, Predicates = new List<IPredicate>() };
+            pg.Predicates.Add(Predicates.Field<CpInvoicingSchedule>(c => c.CustomerID, Operator.Eq, customerID));
+            return _context.db.GetList<CpInvoicingSchedule>(pg).ToList();
+        }
     }
 }

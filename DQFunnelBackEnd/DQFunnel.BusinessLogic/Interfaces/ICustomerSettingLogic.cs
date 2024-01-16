@@ -14,7 +14,7 @@ namespace DQFunnel.BusinessLogic.Interfaces
         CpCustomerSettingEnvelope GetCustomerSettingNamedAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
         CpCustomerSettingEnvelope GetCustomerSettingSharebleAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
         CpCustomerSettingEnvelope GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
-        ResultAction Insert(Req_CustomerSettingInsertCustomerSetting_ViewModel objEntity);
+        ResultAction Insert(CpCustomerSetting objEntity);
         ResultAction Update(long id, CpCustomerSetting objEntity);
         ResultAction Delete(long customerID, long SalesID, int ModifyUserID);
         ResultAction GetCustomerPICByCustomerID(long customerID);
@@ -22,6 +22,5 @@ namespace DQFunnel.BusinessLogic.Interfaces
         ResultAction GetServiceSummary(long customerID);
         ResultAction GetProjectHistory(long customerID);
         ResultAction GetCustomerDataByID(long customerID);
-        ResultAction InsertCustomerSetting(CpCustomerSetting objEntity);
     }
 }

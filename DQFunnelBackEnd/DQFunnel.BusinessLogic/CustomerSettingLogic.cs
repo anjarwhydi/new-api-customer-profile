@@ -317,50 +317,53 @@ namespace DQFunnel.BusinessLogic
             return result;
         }
 
-        public ResultAction Insert(Req_CustomerSettingInsertCustomerSetting_ViewModel objEntity)
+        public ResultAction Insert(CpCustomerSetting objEntity)
         {
             ResultAction result = new ResultAction();
-            objEntity.Status = objEntity.Status.ToLower();
             try
             {
                 using (_context)
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
-                    var existing = uow.CustomerSettingRepository.GetSalesAssignmentById(objEntity.SAssignmentID);
-
-                    if (existing == null)
+                    var findCustomerSetting = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(objEntity.CustomerID);
+                    CpCustomerSetting newCustomerSetting = new CpCustomerSetting();
+                    if (findCustomerSetting == null)
                     {
-                        return MessageResult(false, "Data not found!");
+                        newCustomerSetting.CustomerID = objEntity.CustomerID;
+                        newCustomerSetting.SalesID = objEntity.SalesID;
+                        newCustomerSetting.Named = true;
+                        newCustomerSetting.Shareable = false;
+                        newCustomerSetting.Status = "approve";
+                        newCustomerSetting.CreateUserID = objEntity.CreateUserID;
+                        newCustomerSetting.CreateDate = DateTime.Now;
+                        newCustomerSetting.RequestedBy = objEntity.RequestedBy;
+                        newCustomerSetting.RequestedDate = DateTime.Now;
+                        newCustomerSetting.PMOCustomer = false;
+                        newCustomerSetting.ModifyDate = null;
+                        newCustomerSetting.ModifyUserID = null;
                     }
-
-                    var findCustomerSetting = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(existing.CustomerID);
-                    CpCustomerSetting newCustomerSetting;
-                    if (objEntity.Status == "approve")
+                    if (findCustomerSetting.Status == "approve")
                     {
                         findCustomerSetting.Shareable = true;
                         findCustomerSetting.Named = false;
                         findCustomerSetting.ModifyUserID = objEntity.ModifyUserID;
                         findCustomerSetting.ModifyDate = DateTime.Now;
-                        newCustomerSetting = new CpCustomerSetting
-                        {
-                            CustomerID = findCustomerSetting.CustomerID,
-                            SalesID = existing.SalesID,
-                            CreateDate = findCustomerSetting.CreateDate,
-                            CreateUserID = findCustomerSetting.CreateUserID,
-                            PMOCustomer = findCustomerSetting.PMOCustomer,
-                            Status = "approve",
-                            Named = findCustomerSetting.Named,
-                            Shareable = findCustomerSetting.Shareable,
-                            RequestedBy = existing.RequstedBy,
-                            RequestedDate = existing.RequstedDate,
-                            ModifyUserID = findCustomerSetting.ModifyUserID,
-                            ModifyDate = findCustomerSetting.ModifyDate
-                        };
-
                         uow.CustomerSettingRepository.Update(findCustomerSetting);
-                        uow.CustomerSettingRepository.Add(newCustomerSetting);
+
+                        newCustomerSetting.CustomerID = findCustomerSetting.CustomerID;
+                        newCustomerSetting.SalesID = objEntity.SalesID;
+                        newCustomerSetting.CreateDate = findCustomerSetting.CreateDate;
+                        newCustomerSetting.CreateUserID = findCustomerSetting.CreateUserID;
+                        newCustomerSetting.PMOCustomer = findCustomerSetting.PMOCustomer;
+                        newCustomerSetting.Status = "waiting";
+                        newCustomerSetting.Named = findCustomerSetting.Named;
+                        newCustomerSetting.Shareable = findCustomerSetting.Shareable;
+                        newCustomerSetting.RequestedBy = objEntity.RequestedBy;
+                        newCustomerSetting.RequestedDate = DateTime.Now;
+                        newCustomerSetting.ModifyUserID = findCustomerSetting.ModifyUserID;
+                        newCustomerSetting.ModifyDate = findCustomerSetting.ModifyDate;
                     }
-                    uow.CustomerSettingRepository.ApproveSalesAssignment(objEntity);
+                    uow.CustomerSettingRepository.Add(newCustomerSetting);
                     result = MessageResult(true, "Insert Success!");
                 }
             }
@@ -514,27 +517,6 @@ namespace DQFunnel.BusinessLogic
                     IUnitOfWork uow = new UnitOfWork(_context);
                     var existing = uow.CustomerSettingRepository.GetCustomerDataByID(customerID);
                     result = MessageResult(true, "Success", existing);
-                }
-            }
-            catch (Exception ex)
-            {
-                result = MessageResult(false, ex.Message);
-            }
-            return result;
-        }
-        public ResultAction InsertCustomerSetting(CpCustomerSetting objEntity)
-        {
-            ResultAction result = new ResultAction();
-            try
-            {
-                using (_context)
-                {
-                    IUnitOfWork uow = new UnitOfWork(_context);
-                    objEntity.CreateDate = DateTime.Now;
-                    objEntity.Named = true;
-                    objEntity.Shareable = false;
-                    uow.CustomerSettingRepository.Add(objEntity);
-                    result = MessageResult(true, "Success");
                 }
             }
             catch (Exception ex)

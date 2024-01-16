@@ -133,7 +133,7 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("{ReleaseAccount}")]
+        [HttpPut("ReleaseAccount")]
         public IActionResult ReleaseAccount(long customerID, long salesID, int? modifyUserID)
         {
             try

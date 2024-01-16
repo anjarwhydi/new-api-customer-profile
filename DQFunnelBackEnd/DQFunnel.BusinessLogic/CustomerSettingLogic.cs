@@ -325,9 +325,10 @@ namespace DQFunnel.BusinessLogic
                 using (_context)
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
-                    var findCustomerSetting = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(objEntity.CustomerID);
+                    var existing = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(objEntity.CustomerID);
                     CpCustomerSetting newCustomerSetting = new CpCustomerSetting();
-                    if (findCustomerSetting == null)
+                    var findCustomerSetting = existing.FirstOrDefault(x => x.Status == "approve");
+                    if (existing.Count == 0 && findCustomerSetting == null)
                     {
                         newCustomerSetting.CustomerID = objEntity.CustomerID;
                         newCustomerSetting.SalesID = objEntity.SalesID;
@@ -342,13 +343,13 @@ namespace DQFunnel.BusinessLogic
                         newCustomerSetting.ModifyDate = null;
                         newCustomerSetting.ModifyUserID = null;
                     }
-                    if (findCustomerSetting.Status == "approve")
+                    if (findCustomerSetting != null)
                     {
                         findCustomerSetting.Shareable = true;
                         findCustomerSetting.Named = false;
                         findCustomerSetting.ModifyUserID = objEntity.ModifyUserID;
                         findCustomerSetting.ModifyDate = DateTime.Now;
-                        uow.CustomerSettingRepository.Update(findCustomerSetting);
+                        uow.CustomerSettingRepository.UpdateAllCustomerSetting(objEntity.CustomerID, findCustomerSetting);
 
                         newCustomerSetting.CustomerID = findCustomerSetting.CustomerID;
                         newCustomerSetting.SalesID = objEntity.SalesID;
@@ -362,9 +363,9 @@ namespace DQFunnel.BusinessLogic
                         newCustomerSetting.RequestedDate = DateTime.Now;
                         newCustomerSetting.ModifyUserID = findCustomerSetting.ModifyUserID;
                         newCustomerSetting.ModifyDate = findCustomerSetting.ModifyDate;
+                        uow.CustomerSettingRepository.Add(newCustomerSetting);
+                        result = MessageResult(true, "Insert Success!");
                     }
-                    uow.CustomerSettingRepository.Add(newCustomerSetting);
-                    result = MessageResult(true, "Insert Success!");
                 }
             }
             catch (Exception ex)
@@ -374,8 +375,43 @@ namespace DQFunnel.BusinessLogic
 
             return result;
         }
-
-
+        public ResultAction ReleaseAccount(long customerID, long salesID, int? modifyUserID)
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    var existing = uow.CustomerSettingRepository.GetCustomerSettingBySalesID(customerID, salesID);
+                    if (existing == null)
+                    {
+                        return result = MessageResult(false, "Data not found!");
+                    }
+                    existing.Status = "release";
+                    existing.ModifyDate = DateTime.Now;
+                    existing.ModifyUserID = modifyUserID;
+                    var listCustomerSetting = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(customerID).FirstOrDefault(x => x.Status == "approve");
+                    if (listCustomerSetting != null)
+                    {
+                        listCustomerSetting.Named = true;
+                        listCustomerSetting.Shareable = false;
+                        listCustomerSetting.ModifyDate = existing.ModifyDate;
+                        listCustomerSetting.ModifyUserID = modifyUserID;
+                        existing.Named = true;
+                        existing.Shareable = false;
+                        uow.CustomerSettingRepository.UpdateAllCustomerSetting(customerID, listCustomerSetting);
+                    }
+                    uow.CustomerSettingRepository.UpdateSpecificCustomerSetting(customerID, existing);
+                    result = MessageResult(true, "Update Success!");
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
         public ResultAction Update(long id, CpCustomerSetting objEntity)
         {
             ResultAction result = new ResultAction();
@@ -389,7 +425,7 @@ namespace DQFunnel.BusinessLogic
                     {
                         return result = MessageResult(false, "Data not found!");
                     }
-                    uow.CustomerSettingRepository.UpdateCustomerSetting(id, objEntity);
+                    uow.CustomerSettingRepository.UpdateAllCustomerSetting(id, objEntity);
                     result = MessageResult(true, "Update Success!");
                 }
             }
@@ -414,15 +450,6 @@ namespace DQFunnel.BusinessLogic
                     }
                     uow.CustomerSettingRepository.DeleteCustomerSettingBySalesID(customerID, SalesID);
                     result = MessageResult(true, "Delete Success!");
-                    var count = uow.CustomerSettingRepository.FindAll(c => c.CustomerID == customerID).Count();
-                    if (count == 1)
-                    {
-                        existing.Shareable = false;
-                        existing.Named = true;
-                        existing.ModifyUserID = ModifyUserID;
-                        existing.ModifyDate = DateTime.Now;
-                        uow.CustomerSettingRepository.Update(existing);
-                    }
                 }
             }
             catch (Exception ex)

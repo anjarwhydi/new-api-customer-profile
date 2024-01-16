@@ -16,6 +16,7 @@ namespace DQFunnel.BusinessLogic.Interfaces
         CpCustomerSettingEnvelope GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
         ResultAction Insert(CpCustomerSetting objEntity);
         ResultAction Update(long id, CpCustomerSetting objEntity);
+        ResultAction ReleaseAccount(long customerID, long salesID, int? modifyUserID);
         ResultAction Delete(long customerID, long SalesID, int ModifyUserID);
         ResultAction GetCustomerPICByCustomerID(long customerID);
         ResultAction GetBrandSummary(long customerID);

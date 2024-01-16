@@ -74,7 +74,7 @@ namespace DQFunnel.DataAccess.Repositories
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
-        public bool UpdateCustomerSetting(long id, CpCustomerSetting objEntity)
+        public bool UpdateAllCustomerSetting(long id, CpCustomerSetting objEntity)
         {
             _sql = "[cp].[spUpdateCustomerSetting]";
             var vParams = new DynamicParameters();
@@ -88,55 +88,37 @@ namespace DQFunnel.DataAccess.Repositories
             var output = _context.db.Execute(_sql, param: vParams, transaction: _transaction, commandTimeout: null, commandType: CommandType.StoredProcedure);
             return output == 1 ? true : false;
         }
-        public CpCustomerSetting GetCustomerSettingByCustomerID(long customerID)
+        public List<CpCustomerSetting> GetCustomerSettingByCustomerID(long customerID)
         {
             var pg = new PredicateGroup { Operator = GroupOperator.And, Predicates = new List<IPredicate>() };
             pg.Predicates.Add(Predicates.Field<CpCustomerSetting>(c => c.CustomerID, Operator.Eq, customerID));
-            return _context.db.GetList<CpCustomerSetting>(pg).FirstOrDefault();
+            return _context.db.GetList<CpCustomerSetting>(pg).ToList();
         }
 
-        public List<CpCustomerSetting> GetCustomerSettingBySalesID(long customerID, long salesID)
+
+        public CpCustomerSetting GetCustomerSettingBySalesID(long customerID, long salesID)
         {
-            try
-            {
-                _sql = "SELECT * FROM OMSPROD.cp.CustomerSetting WHERE CustomerID = @CustomerID AND SalesID = @SalesID";
+            _sql = "SELECT * FROM OMSPROD.cp.CustomerSetting WHERE CustomerID = @CustomerID AND SalesID = @SalesID";
 
-                var parameters = new { CustomerID = customerID, SalesID = salesID };
+            var parameters = new { CustomerID = customerID, SalesID = salesID };
 
-                var output = _context.db.Query<CpCustomerSetting>(_sql, parameters, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.Text).ToList();
+            var output = _context.db.Query<CpCustomerSetting>(_sql, parameters, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.Text).FirstOrDefault();
 
-                return output;
-            }
-            catch (Exception)
-            {
-                return new List<CpCustomerSetting>();
-            }
+            return output;
         }
-
-
         public CpSalesAssignment GetSalesAssignmentById(long Id)
         {
             var pg = new PredicateGroup { Operator = GroupOperator.And, Predicates = new List<IPredicate>() };
             pg.Predicates.Add(Predicates.Field<CpSalesAssignment>(c => c.SAssignmentID, Operator.Eq, Id));
             return _context.db.GetList<CpSalesAssignment>(pg).FirstOrDefault();
         }
-
-        public bool ApproveSalesAssignment(Req_CustomerSettingInsertCustomerSetting_ViewModel objEntity)
+        public bool DeleteCustomerSettingBySalesID(long customerID, long SalesID)
         {
             try
             {
-                _sql = @"UPDATE OMSPROD.cp.SalesAssignment 
-                 SET Status = @Status, 
-                     ModifyUserID = @ModifyUserID, 
-                     ModifyDate = GETDATE() 
-                 WHERE SAssignmentID = @SAssignmentID";
+                _sql = "DELETE FROM OMSPROD.cp.CustomerSetting WHERE CustomerID = @CustomerID AND SalesID = @SalesID";
 
-                var parameters = new
-                {
-                    Status = objEntity.Status,
-                    ModifyUserID = objEntity.ModifyUserID,
-                    SAssignmentID = objEntity.SAssignmentID
-                };
+                var parameters = new { CustomerID = customerID, SalesID = SalesID };
 
                 var affectedRows = _context.db.Execute(_sql, parameters, transaction: _transaction, commandTimeout: null, commandType: CommandType.Text);
 
@@ -147,14 +129,13 @@ namespace DQFunnel.DataAccess.Repositories
                 return false;
             }
         }
-
-        public bool DeleteCustomerSettingBySalesID(long customerID, long SalesID)
+        public bool UpdateSpecificCustomerSetting(long id, CpCustomerSetting objEntity)
         {
             try
             {
-                _sql = "DELETE FROM OMSPROD.cp.CustomerSetting WHERE CustomerID = @CustomerID AND SalesID = @SalesID";
+                _sql = "UPDATE OMSPROD.cp.CustomerSetting SET Status = @Status, ModifyUserID = @ModifyUserID, ModifyDate = @ModifyDate WHERE CustomerID = @CustomerID AND SalesID = @SalesID";
 
-                var parameters = new { CustomerID = customerID, SalesID = SalesID };
+                var parameters = new { CustomerID = id, SalesID = objEntity.SalesID, Status = objEntity.Status, ModifyUserID = objEntity.ModifyUserID, ModifyDate = objEntity.ModifyDate };
 
                 var affectedRows = _context.db.Execute(_sql, parameters, transaction: _transaction, commandTimeout: null, commandType: CommandType.Text);
 

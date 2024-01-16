@@ -133,6 +133,19 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("{ReleaseAccount}")]
+        public IActionResult ReleaseAccount(long customerID, long salesID, int? modifyUserID)
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.ReleaseAccount(customerID, salesID, modifyUserID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpDelete("{customerID}")]
         public IActionResult Delete(long customerID, long salesID, int ModifyUserID)
         {

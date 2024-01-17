@@ -328,7 +328,7 @@ namespace DQFunnel.BusinessLogic
                     var existing = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(objEntity.CustomerID);
                     CpCustomerSetting newCustomerSetting = new CpCustomerSetting();
                     var findCustomerSetting = existing.FirstOrDefault(x => x.Status == "approve");
-                    if (existing.Count == 0 && findCustomerSetting == null)
+                    if (findCustomerSetting == null || (findCustomerSetting == null && existing.Count == 0))
                     {
                         newCustomerSetting.CustomerID = objEntity.CustomerID;
                         newCustomerSetting.SalesID = objEntity.SalesID;

@@ -365,9 +365,10 @@ namespace DQFunnel.BusinessLogic
                         newCustomerSetting.RequestedDate = DateTime.Now;
                         newCustomerSetting.ModifyUserID = findCustomerSetting.ModifyUserID;
                         newCustomerSetting.ModifyDate = findCustomerSetting.ModifyDate;
-                        uow.CustomerSettingRepository.Add(newCustomerSetting);
-                        result = MessageResult(true, "Insert Success!");
+
                     }
+                    uow.CustomerSettingRepository.Add(newCustomerSetting);
+                    result = MessageResult(true, "Insert Success!");
                 }
             }
             catch (Exception ex)

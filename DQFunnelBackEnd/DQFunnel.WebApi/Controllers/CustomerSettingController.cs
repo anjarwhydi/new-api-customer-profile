@@ -118,12 +118,12 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("{customerID}")]
-        public IActionResult Update(long customerID, CpCustomerSetting objEntity)
+        [HttpPut("ApproveCustomerSetting")]
+        public IActionResult Update(long customerID, long salesID, int modifyUserID)
         {
             try
             {
-                var result = objCustomerSettingLogic.Update(customerID, objEntity);
+                var result = objCustomerSettingLogic.ApproveCustomerSetting(customerID, salesID, modifyUserID);
                 return Ok(result);
             }
             catch (Exception ex)

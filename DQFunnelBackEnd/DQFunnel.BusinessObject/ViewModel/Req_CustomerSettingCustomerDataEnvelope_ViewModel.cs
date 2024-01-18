@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DQFunnel.BusinessObject.ViewModel
 {
-    public class Req_CustomerSettingGetCustomerDataByID_ViewModel
+    public class Req_CustomerSettingCustomerDataEnvelope_ViewModel
     {
         public string AccountStatus { get; set; }
         public long CustomerID { get; set; }
@@ -16,5 +14,6 @@ namespace DQFunnel.BusinessObject.ViewModel
         public bool Holdshipment { get; set; }
         public float AvgAR { get; set; }
         public string SalesName { get; set; }
+        public Req_CustomerSettingShareableApprovalStatus_ViewModel ShareableApprovalStatus { get; set; }
     }
 }

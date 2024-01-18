@@ -33,5 +33,11 @@ namespace DQFunnel.DataAccess.Repositories
             pg.Predicates.Add(Predicates.Field<CpRelatedFile>(c => c.RFileID, Operator.Eq, Id));
             return _context.db.GetList<CpRelatedFile>(pg).FirstOrDefault();
         }
+        public CpRelatedFile GetRelatedFileByDocumentPath(string documentPath)
+        {
+            var pg = new PredicateGroup { Operator = GroupOperator.And, Predicates = new List<IPredicate>() };
+            pg.Predicates.Add(Predicates.Field<CpRelatedFile>(c => c.DocumentPath, Operator.Eq, documentPath));
+            return _context.db.GetList<CpRelatedFile>(pg).FirstOrDefault();
+        }
     }
 }

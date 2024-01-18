@@ -16,12 +16,12 @@ namespace DQFunnel.DataAccess.Interfaces
         bool UpdateAllCustomerSetting(long id, CpCustomerSetting objEntity);
         bool UpdateSpecificCustomerSetting(long id, CpCustomerSetting objEntity);
         List<CpCustomerSetting> GetCustomerSettingByCustomerID(long customerID);
-        CpSalesAssignment GetSalesAssignmentById(long Id);
+        bool ApproveCustomerSetting(long customerID, long SalesID);
         bool DeleteCustomerSettingBySalesID(long customerID, long SalesID);
         List<Req_CustomerSettingGetPIC_ViewModel> GetCustomerPICByCustomerID(long customerID);
         List<Req_CustomerSettingGetBrandSummary_ViewModel> GetBrandSummary(long customerID);
         List<Req_CustomerSettingGetServiceSummary_ViewModel> GetServiceSummary(long customerID);
-        List<Req_CustomerSettingGetCustomerDataByID_ViewModel> GetCustomerDataByID(long customerID);
+        Req_CustomerSettingGetCustomerDataByID_ViewModel GetCustomerDataByID(long customerID);
         List<Req_CustomerSettingGetProjectHistory_ViewModel> GetProjectHistory(long customerID);
         List<Req_CustomerSettingGetSalesData_ViewModel> GetListSales();
         List<Req_CustomerSettingGetConfigItem_ViewModel> GetConfigItem(long customerID);

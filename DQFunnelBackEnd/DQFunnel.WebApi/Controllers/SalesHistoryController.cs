@@ -1,31 +1,44 @@
-﻿using System;
+﻿using DQFunnel.BusinessLogic.Interfaces;
 using DQFunnel.BusinessLogic;
-using DQFunnel.BusinessLogic.Interfaces;
-using DQFunnel.BusinessObject;
-using DQFunnel.BusinessObject.ViewModel;
 using DQFunnel.WebApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System;
+using DQFunnel.BusinessObject;
 
 namespace DQFunnel.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RelatedFileController : ControllerBase
+    public class SalesHistoryController : ControllerBase
     {
-        private IRelatedFileLogic objRelatedFileLogic;
-        public RelatedFileController(IOptions<DatabaseConfiguration> appSettings, IOptions<ApiGatewayConfig> apiGateway)
+        private ISalesHistoryLogic objSalesHistoryLogic;
+
+        public SalesHistoryController(IOptions<DatabaseConfiguration> appSettings, IOptions<ApiGatewayConfig> apiGateway)
         {
             string apiGatewayURL = string.Format("{0}:{1}", apiGateway.Value.IP, apiGateway.Value.Port);
-            objRelatedFileLogic = new RelatedFileLogic(appSettings.Value.OMSProd, apiGatewayURL);
+            objSalesHistoryLogic = new SalesHistoryLogic(appSettings.Value.OMSProd, apiGatewayURL);
         }
         [HttpGet]
-        public IActionResult GetRelatedFile()
+        public IActionResult GetAll()
         {
             try
             {
-                var result = objRelatedFileLogic.GetRelatedFile();
+                var result = objSalesHistoryLogic.GetAllSalesHistory();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("{salesHistoryID}")]
+        public IActionResult Get(long salesHistoryID)
+        {
+            try
+            {
+                var result = objSalesHistoryLogic.GetSalesHistoryByCustomerID(salesHistoryID);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -34,11 +47,11 @@ namespace DQFunnel.WebApi.Controllers
             }
         }
         [HttpPost]
-        public IActionResult InsertRelatedFile(Req_CustomerSettingInsertRelatedFile_ViewModel objEntity)
+        public IActionResult Insert(CpSalesHistory objEntity)
         {
             try
             {
-                var result = objRelatedFileLogic.InsertRelatedFile(objEntity);
+                var result = objSalesHistoryLogic.InsertSalesHistory(objEntity);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -46,12 +59,12 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("{RelatedFileID}")]
-        public IActionResult UpdateRelatedFile(long RelatedFileID, CpRelatedFile objEntity)
+        [HttpPut("{salesHistoryID}")]
+        public IActionResult Update(long salesHistoryID, CpSalesHistory objEntity)
         {
             try
             {
-                var result = objRelatedFileLogic.UpdateRelatedFile(RelatedFileID, objEntity);
+                var result = objSalesHistoryLogic.UpdateSalesHistory(salesHistoryID, objEntity);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -59,25 +72,12 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete("{RelatedFileID}")]
-        public IActionResult DeleteRelatedFile(long RelatedFileID)
+        [HttpDelete("{salesHistoryID}")]
+        public IActionResult Delete(long salesHistoryID)
         {
             try
             {
-                var result = objRelatedFileLogic.DeleteRelatedFile(RelatedFileID);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpGet("GetRelatedFileByCustomerID")]
-        public IActionResult GetRelatedFileByCustomerID(long customerID)
-        {
-            try
-            {
-                var result = objRelatedFileLogic.GetRelatedFileByCustomerID(customerID);
+                var result = objSalesHistoryLogic.DeleteSalesHistory(salesHistoryID);
                 return Ok(result);
             }
             catch (Exception ex)

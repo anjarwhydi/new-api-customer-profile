@@ -198,7 +198,7 @@ namespace DQFunnel.BusinessLogic
             return result;
         }
 
-        public CpCustomerSettingEnvelope GetCustomerSettingSharebleAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public CpCustomerSettingEnvelope GetCustomerSettingShareableAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             CpCustomerSettingEnvelope result = new CpCustomerSettingEnvelope();
 
@@ -325,50 +325,44 @@ namespace DQFunnel.BusinessLogic
                 using (_context)
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
+
                     var existing = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(objEntity.CustomerID);
-                    CpCustomerSetting newCustomerSetting = new CpCustomerSetting();
-                    var findCustomerSetting = existing.FirstOrDefault(x => x.Status == "approve");
-                    if (findCustomerSetting == null || (findCustomerSetting == null && existing.Count == 0))
-                    {
-                        newCustomerSetting.CustomerID = objEntity.CustomerID;
-                        newCustomerSetting.SalesID = objEntity.SalesID;
-                        newCustomerSetting.CustomerCategory = null;
-                        newCustomerSetting.Named = true;
-                        newCustomerSetting.Shareable = false;
-                        newCustomerSetting.Status = "approve";
-                        newCustomerSetting.CreateUserID = objEntity.CreateUserID;
-                        newCustomerSetting.CreateDate = DateTime.Now;
-                        newCustomerSetting.RequestedBy = objEntity.RequestedBy;
-                        newCustomerSetting.RequestedDate = DateTime.Now;
-                        newCustomerSetting.PMOCustomer = false;
-                        newCustomerSetting.ModifyDate = null;
-                        newCustomerSetting.ModifyUserID = null;
-                    }
-                    if (findCustomerSetting != null)
-                    {
-                        findCustomerSetting.Shareable = true;
-                        findCustomerSetting.Named = false;
-                        findCustomerSetting.ModifyUserID = objEntity.ModifyUserID;
-                        findCustomerSetting.ModifyDate = DateTime.Now;
-                        uow.CustomerSettingRepository.UpdateAllCustomerSetting(objEntity.CustomerID, findCustomerSetting);
 
-                        newCustomerSetting.CustomerID = findCustomerSetting.CustomerID;
-                        newCustomerSetting.SalesID = objEntity.SalesID;
-                        newCustomerSetting.CustomerCategory = findCustomerSetting.CustomerCategory;
-                        newCustomerSetting.CreateDate = findCustomerSetting.CreateDate;
-                        newCustomerSetting.CreateUserID = findCustomerSetting.CreateUserID;
-                        newCustomerSetting.PMOCustomer = findCustomerSetting.PMOCustomer;
-                        newCustomerSetting.Status = "waiting";
-                        newCustomerSetting.Named = findCustomerSetting.Named;
-                        newCustomerSetting.Shareable = findCustomerSetting.Shareable;
-                        newCustomerSetting.RequestedBy = objEntity.RequestedBy;
-                        newCustomerSetting.RequestedDate = DateTime.Now;
-                        newCustomerSetting.ModifyUserID = findCustomerSetting.ModifyUserID;
-                        newCustomerSetting.ModifyDate = findCustomerSetting.ModifyDate;
+                    CpSalesHistory newSalesHistory = new CpSalesHistory()
+                    {
+                        SalesID = objEntity.SalesID,
+                        CustomerID = objEntity.CustomerID,
+                        CreateDate = DateTime.Now,
+                        RequestedDate = DateTime.Now,
+                        RequestedBy = objEntity.RequestedBy,
+                        CreateUserID = objEntity.CreateUserID
+                    };
 
+                    if (existing.Count == 0)
+                    {
+                        CpCustomerSetting newCustomerSetting = new CpCustomerSetting()
+                        {
+                            CustomerID = objEntity.CustomerID,
+                            SalesID = objEntity.SalesID,
+                            Named = true,
+                            Shareable = false,
+                            CreateUserID = objEntity.CreateUserID,
+                            CreateDate = DateTime.Now,
+                            RequestedBy = objEntity.RequestedBy,
+                            RequestedDate = DateTime.Now,
+                            PMOCustomer = false,
+                        };
+                        uow.CustomerSettingRepository.Add(newCustomerSetting);
+                        newSalesHistory.Status = "Assign";
+                        uow.SalesHistoryRepository.Add(newSalesHistory);
+                        result = MessageResult(true, "Insert Success!");
                     }
-                    uow.CustomerSettingRepository.Add(newCustomerSetting);
-                    result = MessageResult(true, "Insert Success!");
+                    else
+                    {
+                        newSalesHistory.Status = "Pending";
+                        uow.SalesHistoryRepository.Add(newSalesHistory);
+                        result = MessageResult(true, "Wait for Approval!");
+                    }
                 }
             }
             catch (Exception ex)
@@ -386,73 +380,77 @@ namespace DQFunnel.BusinessLogic
                 using (_context)
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
+
                     var existing = uow.CustomerSettingRepository.GetCustomerSettingBySalesID(customerID, salesID);
                     if (existing == null)
                     {
                         return result = MessageResult(false, "Data not found!");
                     }
-                    existing.Status = "release";
-                    existing.ModifyDate = DateTime.Now;
+
+                    var salesHistory = uow.SalesHistoryRepository.GetAll().FirstOrDefault(x => x.CustomerID == customerID && x.SalesID == salesID);
+                    salesHistory.Status = "Release";
+                    salesHistory.ModifyUserID = modifyUserID;
+                    salesHistory.ModifyDate = DateTime.Now;
+                    uow.SalesHistoryRepository.Update(salesHistory);
+
+                    uow.CustomerSettingRepository.DeleteCustomerSettingBySalesID(customerID, salesID);
+
+                    var listCustomerSetting = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(customerID);
+                    if (listCustomerSetting.Count > 0)
+                    {
+                        var cs = listCustomerSetting.First();
+                        cs.Named = true;
+                        cs.Shareable = false;
+                        cs.ModifyDate = existing.ModifyDate;
+                        cs.ModifyUserID = modifyUserID;
+                        uow.CustomerSettingRepository.UpdateAllCustomerSetting(customerID, cs);
+                    }
+
+                    result = MessageResult(true, "Update Success!");
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
+        public ResultAction ApproveCustomerSetting(long customerID, long salesID, int? modifyUserID)
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    var existing = uow.SalesHistoryRepository.GetAll().FirstOrDefault(x => x.CustomerID == customerID && x.SalesID == salesID);
+                    if (existing == null)
+                    {
+                        return result = MessageResult(false, "Data not found!");
+                    }
+                    existing.Status = "Assign";
                     existing.ModifyUserID = modifyUserID;
-                    var listCustomerSetting = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(customerID).FirstOrDefault(x => x.Status == "approve");
-                    if (listCustomerSetting != null)
+                    existing.ModifyDate = DateTime.Now;
+                    uow.SalesHistoryRepository.Update(existing);
+                    var customerSetting = uow.CustomerSettingRepository.GetAll().FirstOrDefault(x => x.CustomerID == customerID);
+                    CpCustomerSetting newCustomerSetting = new CpCustomerSetting()
                     {
-                        listCustomerSetting.Named = true;
-                        listCustomerSetting.Shareable = false;
-                        listCustomerSetting.ModifyDate = existing.ModifyDate;
-                        listCustomerSetting.ModifyUserID = modifyUserID;
-                        existing.Named = true;
-                        existing.Shareable = false;
-                        uow.CustomerSettingRepository.UpdateAllCustomerSetting(customerID, listCustomerSetting);
-                    }
-                    uow.CustomerSettingRepository.UpdateSpecificCustomerSetting(customerID, existing);
-                    result = MessageResult(true, "Update Success!");
-                }
-            }
-            catch (Exception ex)
-            {
-                result = MessageResult(false, ex.Message);
-            }
-            return result;
-        }
-        public ResultAction Update(long id, CpCustomerSetting objEntity)
-        {
-            ResultAction result = new ResultAction();
-            try
-            {
-                using (_context)
-                {
-                    IUnitOfWork uow = new UnitOfWork(_context);
-                    var existing = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(id);
-                    if (existing == null)
-                    {
-                        return result = MessageResult(false, "Data not found!");
-                    }
-                    uow.CustomerSettingRepository.UpdateAllCustomerSetting(id, objEntity);
-                    result = MessageResult(true, "Update Success!");
-                }
-            }
-            catch (Exception ex)
-            {
-                result = MessageResult(false, ex.Message);
-            }
-            return result;
-        }
-        public ResultAction Delete(long customerID, long SalesID, int ModifyUserID)
-        {
-            ResultAction result = new ResultAction();
-            try
-            {
-                using (_context)
-                {
-                    IUnitOfWork uow = new UnitOfWork(_context);
-                    var existing = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(customerID);
-                    if (existing == null)
-                    {
-                        return result = MessageResult(false, "Data not found!");
-                    }
-                    uow.CustomerSettingRepository.DeleteCustomerSettingBySalesID(customerID, SalesID);
-                    result = MessageResult(true, "Delete Success!");
+                        CustomerID = existing.CustomerID,
+                        SalesID = existing.SalesID,
+                        Named = false,
+                        Shareable = true,
+                        CreateUserID = customerSetting.CreateUserID,
+                        CreateDate = customerSetting.CreateDate,
+                        RequestedBy = existing.RequestedBy,
+                        RequestedDate = existing.RequestedDate,
+                        PMOCustomer = customerSetting.PMOCustomer,
+                        ModifyUserID = modifyUserID,
+                        ModifyDate = DateTime.Now,
+                        CustomerCategory = customerSetting.CustomerCategory
+                    };
+                    uow.CustomerSettingRepository.Add(newCustomerSetting);
+                    uow.CustomerSettingRepository.UpdateAllCustomerSetting(customerID, newCustomerSetting);
+                    result = MessageResult(true, "Approve Success!");
                 }
             }
             catch (Exception ex)
@@ -546,7 +544,24 @@ namespace DQFunnel.BusinessLogic
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
                     var existing = uow.CustomerSettingRepository.GetCustomerDataByID(customerID);
-                    result = MessageResult(true, "Success", existing);
+                    if (existing == null)
+                    {
+                        return result = MessageResult(false, "Data not found!");
+                    }
+                    Req_CustomerSettingCustomerDataEnvelope_ViewModel envelope = new Req_CustomerSettingCustomerDataEnvelope_ViewModel();
+                    envelope.AccountStatus = existing.AccountStatus;
+                    envelope.CustomerID = existing.CustomerID;
+                    envelope.CustomerName = existing.CustomerName;
+                    envelope.AvgAR = existing.AvgAR;
+                    envelope.PMOCustomer = existing.PMOCustomer;
+                    envelope.Holdshipment = existing.Holdshipment;
+                    envelope.Blacklist = existing.Blacklist;
+                    envelope.SalesName = existing.SalesName;
+                    envelope.CustomerAddress = existing.CustomerAddress;
+                    envelope.CustomerCategory = existing.CustomerCategory;
+                    var shareable = uow.SalesHistoryRepository.GetShareableStatus(customerID);
+                    envelope.ShareableApprovalStatus = shareable;
+                    result = MessageResult(true, "Success", envelope);
                 }
             }
             catch (Exception ex)

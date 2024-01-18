@@ -14,7 +14,6 @@ namespace DQFunnel.BusinessObject
         public bool Shareable { get; set; }
         public bool Named { get; set; }
         public bool PMOCustomer { get; set; }
-        public string Status { get; set; }
         public long RequestedBy { get; set; }
         public DateTime RequestedDate { get; set; }
     }

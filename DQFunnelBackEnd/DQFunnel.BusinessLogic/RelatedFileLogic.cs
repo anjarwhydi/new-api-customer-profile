@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using DQFunnel.BusinessLogic.Interfaces;
 using DQFunnel.BusinessLogic.Services;
 using DQFunnel.BusinessObject;
+using DQFunnel.BusinessObject.ViewModel;
 using DQFunnel.DataAccess;
 using DQFunnel.DataAccess.Interfaces;
 
@@ -79,21 +81,72 @@ namespace DQFunnel.BusinessLogic
             return result;
         }
 
-        public ResultAction InsertRelatedFile(CpRelatedFile objEntity)
+        public ResultAction InsertRelatedFile(Req_CustomerSettingInsertRelatedFile_ViewModel objEntity)
         {
             ResultAction result = new ResultAction();
+
             try
             {
                 using (_context)
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
-                    objEntity.CreateDate = DateTime.Now;
-                    uow.RelatedFileRepository.Add(objEntity);
-                    result = MessageResult(true, "Success");
+
+                    var pathFolder = Environment.CurrentDirectory.Replace("DQFunnel.WebApi", "Uploads\\RelatedFile");
+
+                    var setName = objEntity.DocumentName;
+                    var fileName = objEntity.File.FileName;
+                    int periodIndex = fileName.IndexOf('.');
+                    var documentType = fileName.Substring(fileName.Length - periodIndex);
+
+                    var filePath = Path.Combine(pathFolder, setName);
+
+                    var existing = uow.RelatedFileRepository.GetRelatedFileByDocumentPath(filePath);
+                    string newFilePath = null;
+                    if (existing != null)
+                    {
+                        int number = 1;
+
+                        while (true)
+                        {
+                            var newFileName = $"{setName} ({number})";
+                            newFilePath = Path.Combine(pathFolder, newFileName);
+
+                            var newExisting = uow.RelatedFileRepository.GetRelatedFileByDocumentPath(newFilePath);
+
+                            if (newExisting == null)
+                            {
+                                fileName = newFileName;
+                                break;
+                            }
+                            number++;
+                        }
+                    }
+
+                    filePath = Path.Combine(pathFolder, setName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                    {
+                        objEntity.File.CopyTo(fileStream);
+                    }
+
+                    var insertModel = new CpRelatedFile();
+                    insertModel.RFileID = 0;
+                    insertModel.CustomerID = objEntity.CustomerID;
+                    insertModel.DocumentName = setName + "." + documentType;
+                    insertModel.DocumentType = objEntity.DocumentType;
+                    insertModel.DocumentPath = filePath + "." + documentType;
+                    insertModel.CreateDate = DateTime.Now;
+                    insertModel.CreateUserID = (string.IsNullOrEmpty(objEntity.CreateUserID)) ? 0 : int.Parse(objEntity.CreateUserID);
+                    insertModel.ModifyDate = DateTime.Now;
+                    insertModel.ModifyUserID = objEntity.ModifyUserID;
+
+                    uow.RelatedFileRepository.Add(insertModel);
+
+                    result = MessageResult(true, "Insert Data Success!");
                 }
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 result = MessageResult(false, ex.Message);
             }
             return result;

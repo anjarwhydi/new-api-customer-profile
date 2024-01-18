@@ -82,10 +82,9 @@ namespace DQFunnel.DataAccess.Repositories
             vParams.Add("@Named", objEntity.Named);
             vParams.Add("@Shareable", objEntity.Shareable);
             vParams.Add("@PMOCustomer", objEntity.PMOCustomer);
-            vParams.Add("@ModifyDate", DateTime.Now);
+            vParams.Add("@ModifyDate", objEntity.ModifyDate);
             vParams.Add("@ModifyUserID", objEntity.ModifyUserID);
             vParams.Add("@Category", objEntity.CustomerCategory);
-            vParams.Add("@Status", objEntity.Status);
             var output = _context.db.Execute(_sql, param: vParams, transaction: _transaction, commandTimeout: null, commandType: CommandType.StoredProcedure);
             return output == 1 ? true : false;
         }
@@ -107,12 +106,6 @@ namespace DQFunnel.DataAccess.Repositories
 
             return output;
         }
-        public CpSalesAssignment GetSalesAssignmentById(long Id)
-        {
-            var pg = new PredicateGroup { Operator = GroupOperator.And, Predicates = new List<IPredicate>() };
-            pg.Predicates.Add(Predicates.Field<CpSalesAssignment>(c => c.SAssignmentID, Operator.Eq, Id));
-            return _context.db.GetList<CpSalesAssignment>(pg).FirstOrDefault();
-        }
         public bool DeleteCustomerSettingBySalesID(long customerID, long SalesID)
         {
             try
@@ -130,13 +123,30 @@ namespace DQFunnel.DataAccess.Repositories
                 return false;
             }
         }
+        public bool ApproveCustomerSetting(long customerID, long SalesID)
+        {
+            try
+            {
+                _sql = "UPDATE cp.SalesHistory SET Status = 'Approve' Where CustomerID = @CustomerID AND SalesID = @SalesID";
+
+                var parameters = new { CustomerID = customerID, SalesID = SalesID };
+
+                var affectedRows = _context.db.Execute(_sql, parameters, transaction: _transaction, commandTimeout: null, commandType: CommandType.Text);
+
+                return affectedRows > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         public bool UpdateSpecificCustomerSetting(long id, CpCustomerSetting objEntity)
         {
             try
             {
-                _sql = "UPDATE OMSPROD.cp.CustomerSetting SET Status = @Status, ModifyUserID = @ModifyUserID, ModifyDate = @ModifyDate WHERE CustomerID = @CustomerID AND SalesID = @SalesID";
+                _sql = "UPDATE OMSPROD.cp.CustomerSetting SET  ModifyUserID = @ModifyUserID, ModifyDate = @ModifyDate WHERE CustomerID = @CustomerID AND SalesID = @SalesID";
 
-                var parameters = new { CustomerID = id, SalesID = objEntity.SalesID, Status = objEntity.Status, ModifyUserID = objEntity.ModifyUserID, ModifyDate = objEntity.ModifyDate };
+                var parameters = new { CustomerID = id, SalesID = objEntity.SalesID, ModifyUserID = objEntity.ModifyUserID, ModifyDate = objEntity.ModifyDate };
 
                 var affectedRows = _context.db.Execute(_sql, parameters, transaction: _transaction, commandTimeout: null, commandType: CommandType.Text);
 
@@ -175,14 +185,23 @@ namespace DQFunnel.DataAccess.Repositories
             return output;
         }
 
-        public List<Req_CustomerSettingGetCustomerDataByID_ViewModel> GetCustomerDataByID(long customerID)
+        public Req_CustomerSettingGetCustomerDataByID_ViewModel GetCustomerDataByID(long customerID)
         {
             _sql = "[cp].[spGetCustomerDataByID]";
             var vParams = new DynamicParameters();
             vParams.Add("@CustomerID", customerID);
-            var output = _context.db.Query<Req_CustomerSettingGetCustomerDataByID_ViewModel>(_sql, param: (object)vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            var output = _context.db.Query<Req_CustomerSettingGetCustomerDataByID_ViewModel>(
+                _sql,
+                param: vParams,
+                transaction: _transaction,
+                buffered: false,
+                commandTimeout: null,
+                commandType: CommandType.StoredProcedure
+            ).SingleOrDefault();
+
             return output;
         }
+
 
         public List<Req_CustomerSettingGetProjectHistory_ViewModel> GetProjectHistory(long customerID)
         {

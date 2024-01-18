@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using DQFunnel.BusinessObject.Base;
+
+namespace DQFunnel.BusinessObject
+{
+    public class CpSalesHistory : BaseEntity
+    {
+        public long SalesHistoryID { get; set; }
+        public long CustomerID { get; set; }
+        public long SalesID { get; set; }
+        public string Status { get; set; }
+        public long RequestedBy { get; set; }
+        public DateTime RequestedDate { get; set; }
+    }
+}

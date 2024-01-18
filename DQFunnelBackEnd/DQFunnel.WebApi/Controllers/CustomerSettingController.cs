@@ -97,7 +97,7 @@ namespace DQFunnel.WebApi.Controllers
         {
             try
             {
-                var result = objCustomerSettingLogic.GetCustomerSettingSharebleAccount(page, pageSize, column, sorting, search, salesID, pmoCustomer, blacklist, holdshipment);
+                var result = objCustomerSettingLogic.GetCustomerSettingShareableAccount(page, pageSize, column, sorting, search, salesID, pmoCustomer, blacklist, holdshipment);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -137,19 +137,6 @@ namespace DQFunnel.WebApi.Controllers
             try
             {
                 var result = objCustomerSettingLogic.ReleaseAccount(customerID, salesID, modifyUserID);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpDelete("{customerID}")]
-        public IActionResult Delete(long customerID, long salesID, int ModifyUserID)
-        {
-            try
-            {
-                var result = objCustomerSettingLogic.Delete(customerID, salesID, ModifyUserID);
                 return Ok(result);
             }
             catch (Exception ex)

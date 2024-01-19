@@ -257,7 +257,7 @@ namespace DQFunnel.BusinessLogic
 
             return result;
         }
-        public CpCustomerSettingEnvelope GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public CpCustomerSettingEnvelope GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null, bool? showNoName = null, bool? showNamed = null, bool? showShareable = null)
         {
             CpCustomerSettingEnvelope result = new CpCustomerSettingEnvelope();
 
@@ -273,13 +273,37 @@ namespace DQFunnel.BusinessLogic
             {
                 IUnitOfWork uow = new UnitOfWork(_context);
 
-                var softwareDashboards = uow.CustomerSettingRepository.GetCpCustomerSettingAllAccount(search, salesID, pmoCustomer, blacklist, holdshipment);
+                var noNameTemp = (showNoName ?? true) ? uow.CustomerSettingRepository.GetCustomerSettingNoNamedAccount(search, pmoCustomer, blacklist, holdshipment) : new List<Req_CustomerSettingNoNamedAccount_ViewModel>();
+                var Named = (showNamed ?? true) ? uow.CustomerSettingRepository.GetCustomerSettingNamedAccount(search, salesID, pmoCustomer, blacklist, holdshipment) : new List<CpCustomerSettingDashboard>();
+                var shareable = (showShareable ?? true) ? uow.CustomerSettingRepository.GetCustomerSettingSharebleAccount(search, salesID, pmoCustomer, blacklist, holdshipment) : new List<CpCustomerSettingDashboard>();
+
+                var noName = noNameTemp.Select(item => new CpCustomerSettingDashboard
+                {
+                    CustomerID = item.CustomerID,
+                    CustomerCatageory = null,
+                    CustomerName = item.CustomerName,
+                    CustomerAddress = item.CustomerAddress,
+                    LastProjectName = null,
+                    SalesName = null,
+                    PMOCustomer = false,
+                    RelatedCustomer = null,
+                    Blacklist = item.Blacklist,
+                    Holdshipmet = item.Holdshipmet,
+                    Named = false,
+                    Shareable = false,
+                    CreatedBy = item.CreatedBy,
+                    CreatedDate = item.CreatedDate,
+                    ModifiedBy = item.ModifiedBy,
+                    ModifiedDate = item.ModifiedDate
+                }).ToList();
+
+                var mergedList = noName.Concat(Named).Concat(shareable).ToList();
 
                 var resultSoftware = new List<CpCustomerSettingDashboard>();
 
                 if (page > 0)
                 {
-                    var queryable = softwareDashboards.AsQueryable();
+                    var queryable = mergedList.AsQueryable();
                     resultSoftware = queryable
                         .Skip((page - 1) * pageSize)
                         .Take(pageSize)
@@ -287,10 +311,10 @@ namespace DQFunnel.BusinessLogic
                 }
                 else
                 {
-                    resultSoftware = softwareDashboards;
+                    resultSoftware = mergedList;
                 }
 
-                result.TotalRows = softwareDashboards.Count();
+                result.TotalRows = mergedList.Count();
                 result.Column = column;
 
                 if (sorting != null)
@@ -316,6 +340,9 @@ namespace DQFunnel.BusinessLogic
 
             return result;
         }
+
+
+
 
         public ResultAction Insert(CpCustomerSetting objEntity)
         {

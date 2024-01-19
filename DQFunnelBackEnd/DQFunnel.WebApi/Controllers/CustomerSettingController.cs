@@ -106,11 +106,11 @@ namespace DQFunnel.WebApi.Controllers
             }
         }
         [HttpGet("GetCustomerSettingAllAccount")]
-        public IActionResult GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public IActionResult GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null, bool? showNoName = null, bool? showNamed = null, bool? showShareable = null)
         {
             try
             {
-                var result = objCustomerSettingLogic.GetCustomerSettingAllAccount(page, pageSize, column, sorting, search, salesID, pmoCustomer, blacklist, holdshipment);
+                var result = objCustomerSettingLogic.GetCustomerSettingAllAccount(page, pageSize, column, sorting, search, salesID, pmoCustomer, blacklist, holdshipment, showNoName, showNamed, showShareable);
                 return Ok(result);
             }
             catch (Exception ex)

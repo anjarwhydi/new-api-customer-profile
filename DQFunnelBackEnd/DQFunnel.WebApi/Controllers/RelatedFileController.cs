@@ -34,7 +34,7 @@ namespace DQFunnel.WebApi.Controllers
             }
         }
         [HttpPost]
-        public IActionResult InsertRelatedFile(Req_CustomerSettingInsertRelatedFile_ViewModel objEntity)
+        public IActionResult InsertRelatedFile([FromForm] Req_CustomerSettingInsertRelatedFile_ViewModel objEntity)
         {
             try
             {

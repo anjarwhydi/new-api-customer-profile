@@ -12,5 +12,7 @@ namespace DQFunnel.BusinessLogic.Interfaces
         ResultAction InsertSalesHistory(CpSalesHistory salesHistory);
         ResultAction UpdateSalesHistory(long SalesHistoryID, CpSalesHistory salesHistory);
         ResultAction DeleteSalesHistory(long SalesHistoryID);
+        ResultAction GetAccountOwner(long customerID);
+        ResultAction GetSalesAssignHistory(long customerID);
     }
 }

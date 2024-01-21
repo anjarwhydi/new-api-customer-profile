@@ -28,7 +28,7 @@ namespace DQFunnel.DataAccess.Repositories
             pg.Predicates.Add(Predicates.Field<CpSalesHistory>(c => c.SalesHistoryID, Operator.Eq, SalesHistoryID));
             return _context.db.GetList<CpSalesHistory>(pg).FirstOrDefault();
         }
-        public Req_CustomerSettingShareableApprovalStatus_ViewModel GetShareableStatus(long customerID)
+        public List<Req_CustomerSettingShareableApprovalStatus_ViewModel> GetShareableStatus(long customerID)
         {
             _sql = "[cp].[spGetSalesHistoryApprovalInfo]";
             var vParams = new DynamicParameters();
@@ -40,8 +40,39 @@ namespace DQFunnel.DataAccess.Repositories
                 buffered: false,
                 commandTimeout: null,
                 commandType: CommandType.StoredProcedure
-            ).SingleOrDefault();
+            ).ToList();
 
+            return output;
+        }
+        public List<Req_CustomerSettingGetAccountOwner_ViewModel> GetAccountOwner(long customerID)
+        {
+            _sql = "[cp].[spGetAccountOwner]";
+            var vParams = new DynamicParameters();
+            vParams.Add("@CustomerID", customerID);
+            var output = _context.db.Query<Req_CustomerSettingGetAccountOwner_ViewModel>(
+                _sql,
+                param: vParams,
+                transaction: _transaction,
+                buffered: false,
+                commandTimeout: null,
+                commandType: CommandType.StoredProcedure
+            ).ToList();
+            return output;
+        }
+
+        public List<Req_CustomerSettingGetSalesAssignHistory_ViewModel> GetSalesAssignHistory(long customerID)
+        {
+            _sql = "[cp].[spGetSalesAssignHistory]";
+            var vParams = new DynamicParameters();
+            vParams.Add("@CustomerID", customerID);
+            var output = _context.db.Query<Req_CustomerSettingGetSalesAssignHistory_ViewModel>(
+                _sql,
+                param: vParams,
+                transaction: _transaction,
+                buffered: false,
+                commandTimeout: null,
+                commandType: CommandType.StoredProcedure
+            ).ToList();
             return output;
         }
     }

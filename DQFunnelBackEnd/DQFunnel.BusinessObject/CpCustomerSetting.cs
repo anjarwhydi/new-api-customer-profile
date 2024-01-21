@@ -13,7 +13,7 @@ namespace DQFunnel.BusinessObject
         public long SalesID { get; set; }
         public bool Shareable { get; set; }
         public bool Named { get; set; }
-        public bool PMOCustomer { get; set; }
+        public bool? PMOCustomer { get; set; }
         public long RequestedBy { get; set; }
         public DateTime RequestedDate { get; set; }
     }

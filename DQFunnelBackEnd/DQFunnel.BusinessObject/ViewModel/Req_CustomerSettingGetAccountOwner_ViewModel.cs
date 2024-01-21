@@ -2,12 +2,11 @@
 
 namespace DQFunnel.BusinessObject.ViewModel
 {
-    public class Req_CustomerSettingShareableApprovalStatus_ViewModel
+    public class Req_CustomerSettingGetAccountOwner_ViewModel
     {
         public string Status { get; set; }
+        public string SalesName { get; set; }
         public string RequestedBy { get; set; }
         public string RequestedDate { get; set; }
-        public string ApprovalBy { get; set; }
-        public string ApprovalDate { get; set; }
     }
 }

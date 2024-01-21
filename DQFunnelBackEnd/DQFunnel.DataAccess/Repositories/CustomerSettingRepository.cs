@@ -35,7 +35,7 @@ namespace DQFunnel.DataAccess.Repositories
             return output;
         }
 
-        public List<CpCustomerSettingDashboard> GetCustomerSettingNamedAccount(string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public List<CpCustomerSettingDashboard> GetCustomerSettingNamedAccount(string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             _sql = "[cp].[spGetCustomerSettingNamedAccounts]";
             var vParams = new DynamicParameters();
@@ -48,7 +48,7 @@ namespace DQFunnel.DataAccess.Repositories
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
-        public List<CpCustomerSettingDashboard> GetCustomerSettingSharebleAccount(string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public List<CpCustomerSettingDashboard> GetCustomerSettingSharebleAccount(string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             _sql = "[cp].[spGetCustomerSettingSharebleAccounts]";
             var vParams = new DynamicParameters();
@@ -61,19 +61,19 @@ namespace DQFunnel.DataAccess.Repositories
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
-        public List<CpCustomerSettingDashboard> GetCpCustomerSettingAllAccount(string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
-        {
-            _sql = "[cp].[spGetCustomerSettingAllAccounts]";
-            var vParams = new DynamicParameters();
-            vParams.Add("@SearchKeyword", search);
-            vParams.Add("@PMOCustomer", pmoCustomer);
-            vParams.Add("@Blacklist", blacklist);
-            vParams.Add("@Holdshipment", holdshipment);
-            vParams.Add("@SalesID", salesID);
+        // public List<CpCustomerSettingDashboard> GetCpCustomerSettingAllAccount(string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        // {
+        //     _sql = "[cp].[spGetCustomerSettingAllAccounts]";
+        //     var vParams = new DynamicParameters();
+        //     vParams.Add("@SearchKeyword", search);
+        //     vParams.Add("@PMOCustomer", pmoCustomer);
+        //     vParams.Add("@Blacklist", blacklist);
+        //     vParams.Add("@Holdshipment", holdshipment);
+        //     vParams.Add("@SalesID", salesID);
 
-            var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
-            return output;
-        }
+        //     var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+        //     return output;
+        // }
         public bool UpdateAllCustomerSetting(long id, CpCustomerSetting objEntity)
         {
             _sql = "[cp].[spUpdateCustomerSetting]";
@@ -123,40 +123,19 @@ namespace DQFunnel.DataAccess.Repositories
                 return false;
             }
         }
-        public bool ApproveCustomerSetting(long customerID, long SalesID)
-        {
-            try
-            {
-                _sql = "UPDATE cp.SalesHistory SET Status = 'Approve' Where CustomerID = @CustomerID AND SalesID = @SalesID";
-
-                var parameters = new { CustomerID = customerID, SalesID = SalesID };
-
-                var affectedRows = _context.db.Execute(_sql, parameters, transaction: _transaction, commandTimeout: null, commandType: CommandType.Text);
-
-                return affectedRows > 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
         public bool UpdateSpecificCustomerSetting(long id, CpCustomerSetting objEntity)
         {
-            try
-            {
-                _sql = "UPDATE OMSPROD.cp.CustomerSetting SET  ModifyUserID = @ModifyUserID, ModifyDate = @ModifyDate WHERE CustomerID = @CustomerID AND SalesID = @SalesID";
-
-                var parameters = new { CustomerID = id, SalesID = objEntity.SalesID, ModifyUserID = objEntity.ModifyUserID, ModifyDate = objEntity.ModifyDate };
-
-                var affectedRows = _context.db.Execute(_sql, parameters, transaction: _transaction, commandTimeout: null, commandType: CommandType.Text);
-
-                return affectedRows > 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            _sql = "[cp].[spUpdateCustomerSettingPMOCustomerCategory]";
+            var vParams = new DynamicParameters();
+            vParams.Add("@CustomerID", id);
+            vParams.Add("@PMOCustomer", objEntity.PMOCustomer);
+            vParams.Add("@ModifyDate", objEntity.ModifyDate);
+            vParams.Add("@ModifyUserID", objEntity.ModifyUserID);
+            vParams.Add("@Category", objEntity.CustomerCategory);
+            var output = _context.db.Execute(_sql, param: vParams, transaction: _transaction, commandTimeout: null, commandType: CommandType.StoredProcedure);
+            return output == 1 ? true : false;
         }
+
 
         public List<Req_CustomerSettingGetPIC_ViewModel> GetCustomerPICByCustomerID(long customerID)
         {
@@ -201,8 +180,6 @@ namespace DQFunnel.DataAccess.Repositories
 
             return output;
         }
-
-
         public List<Req_CustomerSettingGetProjectHistory_ViewModel> GetProjectHistory(long customerID)
         {
             _sql = "[cp].[spGetProjectHistory]";

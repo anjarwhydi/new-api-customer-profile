@@ -36,6 +36,19 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut]
+        public IActionResult Update(long customerID, CpCustomerSetting objEntity)
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.Update(customerID, objEntity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet]
         public IActionResult Get()
         {
@@ -79,7 +92,7 @@ namespace DQFunnel.WebApi.Controllers
         }
 
         [HttpGet("GetCustomerSettingNamedAccount")]
-        public IActionResult GetCustomerSettingNamedAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public IActionResult GetCustomerSettingNamedAccount(int page, int pageSize, string column, string sorting, string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             try
             {
@@ -93,7 +106,7 @@ namespace DQFunnel.WebApi.Controllers
         }
 
         [HttpGet("GetCustomerSettingSharebleAccount")]
-        public IActionResult GetCustomerSettingSharebleAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public IActionResult GetCustomerSettingSharebleAccount(int page, int pageSize, string column, string sorting, string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             try
             {
@@ -106,7 +119,7 @@ namespace DQFunnel.WebApi.Controllers
             }
         }
         [HttpGet("GetCustomerSettingAllAccount")]
-        public IActionResult GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, long? salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null, bool? showNoName = null, bool? showNamed = null, bool? showShareable = null)
+        public IActionResult GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null, bool? showNoName = null, bool? showNamed = null, bool? showShareable = null)
         {
             try
             {
@@ -119,11 +132,11 @@ namespace DQFunnel.WebApi.Controllers
             }
         }
         [HttpPut("ApproveCustomerSetting")]
-        public IActionResult Update(long customerID, long salesID, int modifyUserID)
+        public IActionResult Update(long customerID, long salesID, bool isApprove, int modifyUserID)
         {
             try
             {
-                var result = objCustomerSettingLogic.ApproveCustomerSetting(customerID, salesID, modifyUserID);
+                var result = objCustomerSettingLogic.ApproveCustomerSetting(customerID, salesID, isApprove, modifyUserID);
                 return Ok(result);
             }
             catch (Exception ex)

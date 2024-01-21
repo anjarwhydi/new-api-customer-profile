@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DQFunnel.BusinessObject.ViewModel
 {
@@ -14,6 +15,6 @@ namespace DQFunnel.BusinessObject.ViewModel
         public bool Holdshipment { get; set; }
         public float AvgAR { get; set; }
         public string SalesName { get; set; }
-        public Req_CustomerSettingShareableApprovalStatus_ViewModel ShareableApprovalStatus { get; set; }
+        public List<Req_CustomerSettingShareableApprovalStatus_ViewModel> ShareableApprovalStatus { get; set; }
     }
 }

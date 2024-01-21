@@ -85,5 +85,31 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("GetAccountOwner")]
+        public IActionResult GetAccountOwner(long customerID)
+        {
+            try
+            {
+                var result = objSalesHistoryLogic.GetAccountOwner(customerID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetSalesAssignHistory")]
+        public IActionResult GetSalesAssignHistory(long customerID)
+        {
+            try
+            {
+                var result = objSalesHistoryLogic.GetSalesAssignHistory(customerID);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

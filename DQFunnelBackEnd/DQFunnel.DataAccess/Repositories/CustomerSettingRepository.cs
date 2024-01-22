@@ -43,7 +43,7 @@ namespace DQFunnel.DataAccess.Repositories
             vParams.Add("@PMOCustomer", pmoCustomer);
             vParams.Add("@Blacklist", blacklist);
             vParams.Add("@Holdshipment", holdshipment);
-            vParams.Add("@SalesID", salesID);
+            vParams.Add("@SalesIDs", salesID);
 
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
@@ -56,7 +56,7 @@ namespace DQFunnel.DataAccess.Repositories
             vParams.Add("@PMOCustomer", pmoCustomer);
             vParams.Add("@Blacklist", blacklist);
             vParams.Add("@Holdshipment", holdshipment);
-            vParams.Add("@SalesID", salesID);
+            vParams.Add("@SalesIDs", salesID);
 
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;

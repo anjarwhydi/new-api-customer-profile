@@ -275,6 +275,19 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("GetCustomerByName")]
+        public IActionResult GetCustomerByName(string customerName)
+        {
+            try
+            {
+                var result = objCustomerSettingLogic.GetCustomerName(customerName);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet("GetCustomerCategory")]
         public IActionResult GetCustomerCategory()
         {

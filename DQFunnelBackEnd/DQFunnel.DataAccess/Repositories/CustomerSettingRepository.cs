@@ -225,5 +225,13 @@ namespace DQFunnel.DataAccess.Repositories
             var output = _context.db.Query<Req_CustomerSettingGetCustomerCategory_ViewModel>(_sql, param: null, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
+        public List<Req_CustomerSettingGetCustomerDataByName_ViewModel> GetCustomerByName(string customerName)
+        {
+            _sql = "[cp].[spSearchCustomerName]";
+            var vParams = new DynamicParameters();
+            vParams.Add("@Search", customerName);
+            var output = _context.db.Query<Req_CustomerSettingGetCustomerDataByName_ViewModel>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            return output;
+        }
     }
 }

@@ -28,5 +28,6 @@ namespace DQFunnel.BusinessLogic.Interfaces
         ResultAction GetSalesByName(string salesName);
         ResultAction GetCustomerCategory();
         ResultAction Update(long customerID, CpCustomerSetting objEntity);
+        ResultAction GetCustomerName(string customerName);
     }
 }

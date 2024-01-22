@@ -694,6 +694,24 @@ namespace DQFunnel.BusinessLogic
             }
             return result;
         }
+        public ResultAction GetCustomerName(string customerName)
+        {
+            ResultAction result = new ResultAction();
+            try
+            {
+                using (_context)
+                {
+                    IUnitOfWork uow = new UnitOfWork(_context);
+                    var existing = uow.CustomerSettingRepository.GetCustomerByName(customerName);
+                    result = MessageResult(true, "Success", existing);
+                }
+            }
+            catch (Exception ex)
+            {
+                result = MessageResult(false, ex.Message);
+            }
+            return result;
+        }
         public ResultAction Update(long customerID, CpCustomerSetting objEntity)
         {
             ResultAction result = new ResultAction();

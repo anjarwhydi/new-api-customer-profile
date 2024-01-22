@@ -93,6 +93,11 @@ namespace DQFunnel.BusinessLogic
 
                     var pathFolder = Environment.CurrentDirectory.Replace("DQFunnel.WebApi", "Uploads\\RelatedFile");
 
+                    if (!Directory.Exists(pathFolder))
+                    {
+                        Directory.CreateDirectory(pathFolder);
+                    }
+
                     var setName = objEntity.DocumentName;
                     var fileName = objEntity.File.FileName;
                     int periodIndex = fileName.IndexOf('.');
@@ -151,6 +156,7 @@ namespace DQFunnel.BusinessLogic
             }
             return result;
         }
+
 
         public ResultAction UpdateRelatedFile(long Id, CpRelatedFile objEntity)
         {

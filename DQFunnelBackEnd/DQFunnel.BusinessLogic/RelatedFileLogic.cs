@@ -100,10 +100,9 @@ namespace DQFunnel.BusinessLogic
 
                     var setName = objEntity.DocumentName;
                     var fileName = objEntity.File.FileName;
-                    int periodIndex = fileName.IndexOf('.');
-                    var documentType = fileName.Substring(fileName.Length - periodIndex);
+                    var documentType = Path.GetExtension(fileName);
 
-                    var filePath = Path.Combine(pathFolder, setName);
+                    var filePath = Path.Combine(pathFolder, setName + documentType);
 
                     var existing = uow.RelatedFileRepository.GetRelatedFileByDocumentPath(filePath);
                     string newFilePath = null;
@@ -113,21 +112,20 @@ namespace DQFunnel.BusinessLogic
 
                         while (true)
                         {
-                            var newFileName = $"{setName} ({number})";
-                            newFilePath = Path.Combine(pathFolder, newFileName);
+                            var newFileName = $"{setName}({number})";
+                            newFilePath = Path.Combine(pathFolder, newFileName + documentType);
 
                             var newExisting = uow.RelatedFileRepository.GetRelatedFileByDocumentPath(newFilePath);
 
                             if (newExisting == null)
                             {
                                 fileName = newFileName;
+                                filePath = newFilePath; // Update filePath with the new file path
                                 break;
                             }
                             number++;
                         }
                     }
-
-                    filePath = Path.Combine(pathFolder, setName);
                     using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                     {
                         objEntity.File.CopyTo(fileStream);
@@ -136,9 +134,9 @@ namespace DQFunnel.BusinessLogic
                     var insertModel = new CpRelatedFile();
                     insertModel.RFileID = 0;
                     insertModel.CustomerID = objEntity.CustomerID;
-                    insertModel.DocumentName = setName + "." + documentType;
+                    insertModel.DocumentName = setName + documentType;
                     insertModel.DocumentType = objEntity.DocumentType;
-                    insertModel.DocumentPath = filePath + "." + documentType;
+                    insertModel.DocumentPath = filePath;
                     insertModel.CreateDate = DateTime.Now;
                     insertModel.CreateUserID = (string.IsNullOrEmpty(objEntity.CreateUserID)) ? 0 : int.Parse(objEntity.CreateUserID);
                     insertModel.ModifyDate = DateTime.Now;

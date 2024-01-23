@@ -384,11 +384,35 @@ namespace DQFunnel.BusinessLogic
                         uow.SalesHistoryRepository.Add(newSalesHistory);
                         result = MessageResult(true, "Insert Success!");
                     }
-                    else
+                    else if (existing.Count == 1)
                     {
                         newSalesHistory.Status = "Pending";
                         uow.SalesHistoryRepository.Add(newSalesHistory);
                         result = MessageResult(true, "Wait for Approval!");
+                    }
+                    else
+                    {
+                        var customerSetting = existing.FirstOrDefault(x => x.CustomerID == objEntity.CustomerID);
+                        CpCustomerSetting newCustomerSetting = new CpCustomerSetting()
+                        {
+                            CustomerID = objEntity.CustomerID,
+                            SalesID = objEntity.SalesID,
+                            Named = false,
+                            Shareable = true,
+                            CreateUserID = customerSetting.CreateUserID,
+                            CreateDate = customerSetting.CreateDate,
+                            RequestedBy = objEntity.RequestedBy,
+                            RequestedDate = DateTime.Now,
+                            PMOCustomer = customerSetting.PMOCustomer,
+                            ModifyUserID = objEntity.CreateUserID,
+                            ModifyDate = DateTime.Now,
+                            CustomerCategory = customerSetting.CustomerCategory
+                        };
+                        uow.CustomerSettingRepository.Add(newCustomerSetting);
+                        uow.CustomerSettingRepository.UpdateAllCustomerSetting(objEntity.CustomerID, newCustomerSetting);
+                        newSalesHistory.Status = "Assign";
+                        uow.SalesHistoryRepository.Add(newSalesHistory);
+                        result = MessageResult(true, "Insert Success!");
                     }
                 }
             }

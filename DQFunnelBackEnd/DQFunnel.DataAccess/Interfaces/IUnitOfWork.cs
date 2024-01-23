@@ -20,6 +20,8 @@ namespace DQFunnel.DataAccess.Interfaces
         IRelatedCustomerRepository RelatedCustomerRepository { get; }
         IRelatedFileRepository RelatedFileRepository { get; }
         ISalesHistoryRepository SalesHistoryRepository { get; }
+        ICustomerSuccessStoryRepository CustomerSuccessStoryRepository { get; }
+
 
     }
 }

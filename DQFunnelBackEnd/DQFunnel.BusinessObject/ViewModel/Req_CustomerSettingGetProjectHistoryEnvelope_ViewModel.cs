@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DQFunnel.BusinessObject.ViewModel
 {
-    public class Req_CustomerSettingGetProjectHistory_ViewModel
+    public class Req_CustomerSettingGetProjectHistoryEnvelope_ViewModel
     {
         public long FunnelID { get; set; }
         public string SO { get; set; }
@@ -15,5 +15,6 @@ namespace DQFunnel.BusinessObject.ViewModel
         public string SOCloseDate { get; set; }
         public float SOAmount { get; set; }
         public string SuccessStory { get; set; }
+        public List<Req_CustomerSettingGetModifySuccessStories_ViewModel> ModifiedStoryBy { get; set; }
     }
 }

@@ -559,7 +559,20 @@ namespace DQFunnel.BusinessLogic
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
                     var existing = uow.CustomerSettingRepository.GetProjectHistory(customerID);
-                    result = MessageResult(true, "Success", existing);
+                    List<Req_CustomerSettingGetProjectHistoryEnvelope_ViewModel> project = existing.Select(item => new Req_CustomerSettingGetProjectHistoryEnvelope_ViewModel
+                    {
+                        FunnelID = item.FunnelID,
+                        SO = item.SO,
+                        ProjectName = item.ProjectName,
+                        CustomerName = item.CustomerName,
+                        SalesName = item.SalesName,
+                        SalesDept = item.SalesDept,
+                        SOCloseDate = item.SOCloseDate,
+                        SOAmount = item.SOAmount,
+                        SuccessStory = item.SuccessStory,
+                        ModifiedStoryBy = uow.CustomerSuccessStoryRepository.GetCustomerStoriesByCustomerID(item.FunnelID).ToList()
+                    }).ToList();
+                    result = MessageResult(true, "Success", project);
                 }
             }
             catch (Exception ex)

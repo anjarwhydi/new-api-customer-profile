@@ -43,6 +43,7 @@ namespace DQFunnel.BusinessLogic
                 using (_context)
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
+                    objEntity.CreateDate = DateTime.Now;
                     uow.CustomerSuccessStoryRepository.Add(objEntity);
                     result = MessageResult(true, "Insert Success");
                 }

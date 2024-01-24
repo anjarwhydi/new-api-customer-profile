@@ -214,7 +214,7 @@ namespace DQFunnel.BusinessLogic
             {
                 IUnitOfWork uow = new UnitOfWork(_context);
 
-                var softwareDashboards = uow.CustomerSettingRepository.GetCustomerSettingSharebleAccount(search, salesID, pmoCustomer, blacklist, holdshipment);
+                var softwareDashboards = uow.CustomerSettingRepository.GetCustomerSettingShareableAccount(search, salesID, pmoCustomer, blacklist, holdshipment);
 
                 var resultSoftware = new List<CpCustomerSettingDashboard>();
 
@@ -275,12 +275,12 @@ namespace DQFunnel.BusinessLogic
 
                 var noNameTemp = (showNoName ?? true) ? uow.CustomerSettingRepository.GetCustomerSettingNoNamedAccount(search, pmoCustomer, blacklist, holdshipment) : new List<Req_CustomerSettingNoNamedAccount_ViewModel>();
                 var Named = (showNamed ?? true) ? uow.CustomerSettingRepository.GetCustomerSettingNamedAccount(search, salesID, pmoCustomer, blacklist, holdshipment) : new List<CpCustomerSettingDashboard>();
-                var shareable = (showShareable ?? true) ? uow.CustomerSettingRepository.GetCustomerSettingSharebleAccount(search, salesID, pmoCustomer, blacklist, holdshipment) : new List<CpCustomerSettingDashboard>();
+                var shareable = (showShareable ?? true) ? uow.CustomerSettingRepository.GetCustomerSettingShareableAccount(search, salesID, pmoCustomer, blacklist, holdshipment) : new List<CpCustomerSettingDashboard>();
 
                 var noName = noNameTemp.Select(item => new CpCustomerSettingDashboard
                 {
                     CustomerID = item.CustomerID,
-                    CustomerCatageory = null,
+                    CustomerCategory = null,
                     CustomerName = item.CustomerName,
                     CustomerAddress = item.CustomerAddress,
                     LastProjectName = null,
@@ -288,7 +288,7 @@ namespace DQFunnel.BusinessLogic
                     PMOCustomer = false,
                     RelatedCustomer = null,
                     Blacklist = item.Blacklist,
-                    Holdshipmet = item.Holdshipmet,
+                    Holdshipment = item.Holdshipment,
                     Named = false,
                     Shareable = false,
                     CreatedBy = item.CreatedBy,

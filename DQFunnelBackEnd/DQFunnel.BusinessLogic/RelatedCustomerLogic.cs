@@ -92,12 +92,13 @@ namespace DQFunnel.BusinessLogic
                     objEntity.ModifyUserID = null;
                     uow.RelatedCustomerRepository.Add(objEntity);
 
-                    var temp = objEntity;
-                    CpRelatedCustomer newData = new CpRelatedCustomer();
-                    newData = objEntity;
-                    newData.CustomerID = temp.RelatedCustomerID;
-                    newData.RelatedCustomerID = temp.CustomerID;
-
+                    CpRelatedCustomer newData = new CpRelatedCustomer
+                    {
+                        CustomerID = objEntity.RelatedCustomerID,
+                        RelatedCustomerID = objEntity.CustomerID,
+                        CreateUserID = objEntity.CreateUserID,
+                        CreateDate = DateTime.Now
+                    };
                     uow.RelatedCustomerRepository.Add(newData);
                     result = MessageResult(true, "Success");
                 }

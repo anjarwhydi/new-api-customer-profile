@@ -25,7 +25,7 @@ namespace DQFunnel.DataAccess.Repositories
         public CpRelatedCustomer GetRelatedCustomerById(long Id)
         {
             var pg = new PredicateGroup { Operator = GroupOperator.And, Predicates = new List<IPredicate>() };
-            pg.Predicates.Add(Predicates.Field<CpRelatedCustomer>(c => c.RelatedCustomerID, Operator.Eq, Id));
+            pg.Predicates.Add(Predicates.Field<CpRelatedCustomer>(c => c.RCustomerID, Operator.Eq, Id));
             return _context.db.GetList<CpRelatedCustomer>(pg).FirstOrDefault();
         }
         public List<Req_CustomerSettingGetRelatedCustomer_ViewModel> GetRelatedCustomerByCustomerID(long customerID)
@@ -39,7 +39,7 @@ namespace DQFunnel.DataAccess.Repositories
 
         public bool DeleteRelatedCustomer(long Id)
         {
-            _sql = "[cs].[spDeleteRelatedCustomerById]";
+            _sql = "[cp].[spDeleteRelatedCustomerById]";
             var vParams = new DynamicParameters();
             vParams.Add("@Id", Id);
             var affectedRows = _context.db.Execute(_sql, param: (object)vParams, transaction: _transaction, commandTimeout: null, commandType: CommandType.StoredProcedure);

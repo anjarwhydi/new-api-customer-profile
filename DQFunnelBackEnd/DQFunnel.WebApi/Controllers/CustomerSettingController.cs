@@ -105,8 +105,8 @@ namespace DQFunnel.WebApi.Controllers
             }
         }
 
-        [HttpGet("GetCustomerSettingSharebleAccount")]
-        public IActionResult GetCustomerSettingSharebleAccount(int page, int pageSize, string column, string sorting, string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        [HttpGet("GetCustomerSettingShareableAccount")]
+        public IActionResult GetCustomerSettingShareableAccount(int page, int pageSize, string column, string sorting, string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             try
             {

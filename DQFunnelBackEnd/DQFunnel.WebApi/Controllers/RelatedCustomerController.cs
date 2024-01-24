@@ -47,12 +47,12 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("{RelatedCustomerID}")]
-        public IActionResult UpdateRelatedCustomer(long RelatedCustomerID, CpRelatedCustomer objEntity)
+        [HttpPut("{RCustomerID}")]
+        public IActionResult UpdateRelatedCustomer(long RCustomerID, CpRelatedCustomer objEntity)
         {
             try
             {
-                var result = objRelatedCustomerLogic.UpdateRelatedCustomer(RelatedCustomerID, objEntity);
+                var result = objRelatedCustomerLogic.UpdateRelatedCustomer(RCustomerID, objEntity);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -60,12 +60,12 @@ namespace DQFunnel.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete("{RelatedCustomerID}")]
-        public IActionResult DeleteRelatedCustomer(long RelatedCustomerID)
+        [HttpDelete("{RCustomerID}")]
+        public IActionResult DeleteRelatedCustomer(long RCustomerID)
         {
             try
             {
-                var result = objRelatedCustomerLogic.DeleteRelatedCustomer(RelatedCustomerID);
+                var result = objRelatedCustomerLogic.DeleteRelatedCustomer(RCustomerID);
                 return Ok(result);
             }
             catch (Exception ex)

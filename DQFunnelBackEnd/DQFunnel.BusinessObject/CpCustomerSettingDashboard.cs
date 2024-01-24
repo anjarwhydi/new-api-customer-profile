@@ -7,7 +7,7 @@ namespace DQFunnel.BusinessObject
     public class CpCustomerSettingDashboard
     {
         public long CustomerID { get; set; }
-        public string CustomerCatageory { get; set; }
+        public string CustomerCategory { get; set; }
         public string CustomerName { get; set; }
         public string CustomerAddress { get; set; }
         public string LastProjectName { get; set; }
@@ -15,7 +15,7 @@ namespace DQFunnel.BusinessObject
         public bool PMOCustomer { get; set; }
         public string RelatedCustomer { get; set; }
         public bool Blacklist { get; set; }
-        public bool Holdshipmet { get; set; }
+        public bool Holdshipment { get; set; }
         public bool Named { get; set; }
         public bool Shareable { get; set; }
         public string CreatedBy { get; set; }

@@ -22,5 +22,8 @@ namespace DQFunnel.BusinessObject
         public string CreatedDate { get; set; }
         public string ModifiedBy { get; set; }
         public string ModifiedDate { get; set; }
+        public string RequestedBy { get; set; }
+        public long SalesShareableID { get; set; }
+        public long ApprovalBy { get; set; }
     }
 }

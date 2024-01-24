@@ -13,5 +13,6 @@ namespace DQFunnel.BusinessObject
         public string Status { get; set; }
         public long RequestedBy { get; set; }
         public DateTime RequestedDate { get; set; }
+        public long ApprovalBy { get; set; }
     }
 }

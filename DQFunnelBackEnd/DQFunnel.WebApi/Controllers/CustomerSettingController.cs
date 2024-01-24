@@ -92,11 +92,11 @@ namespace DQFunnel.WebApi.Controllers
         }
 
         [HttpGet("GetCustomerSettingNamedAccount")]
-        public IActionResult GetCustomerSettingNamedAccount(int page, int pageSize, string column, string sorting, string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public IActionResult GetCustomerSettingNamedAccount(int page, int pageSize, string column, string sorting, string search, string salesID, long approvalBy, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             try
             {
-                var result = objCustomerSettingLogic.GetCustomerSettingNamedAccount(page, pageSize, column, sorting, search, salesID, pmoCustomer, blacklist, holdshipment);
+                var result = objCustomerSettingLogic.GetCustomerSettingNamedAccount(page, pageSize, column, sorting, search, salesID, approvalBy, pmoCustomer, blacklist, holdshipment);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -119,11 +119,11 @@ namespace DQFunnel.WebApi.Controllers
             }
         }
         [HttpGet("GetCustomerSettingAllAccount")]
-        public IActionResult GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null, bool? showNoName = null, bool? showNamed = null, bool? showShareable = null)
+        public IActionResult GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, string salesID, long approvalBy, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null, bool? showNoName = null, bool? showNamed = null, bool? showShareable = null)
         {
             try
             {
-                var result = objCustomerSettingLogic.GetCustomerSettingAllAccount(page, pageSize, column, sorting, search, salesID, pmoCustomer, blacklist, holdshipment, showNoName, showNamed, showShareable);
+                var result = objCustomerSettingLogic.GetCustomerSettingAllAccount(page, pageSize, column, sorting, search, salesID, approvalBy, pmoCustomer, blacklist, holdshipment, showNoName, showNamed, showShareable);
                 return Ok(result);
             }
             catch (Exception ex)

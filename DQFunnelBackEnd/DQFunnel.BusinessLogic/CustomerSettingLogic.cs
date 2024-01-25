@@ -339,7 +339,7 @@ namespace DQFunnel.BusinessLogic
                         CreateDate = DateTime.Now,
                         RequestedDate = DateTime.Now,
                         RequestedBy = objEntity.RequestedBy,
-                        CreateUserID = objEntity.CreateUserID
+                        CreateUserID = objEntity.CreateUserID,
                     };
 
                     if (existing.Count == 0)
@@ -364,6 +364,7 @@ namespace DQFunnel.BusinessLogic
                     else if (existing.Count == 1)
                     {
                         newSalesHistory.Status = "Pending";
+                        newSalesHistory.ApprovalBy = 26932;
                         uow.SalesHistoryRepository.Add(newSalesHistory);
                         result = MessageResult(true, "Wait for Approval!");
                     }

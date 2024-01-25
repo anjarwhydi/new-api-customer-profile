@@ -35,7 +35,7 @@ namespace DQFunnel.DataAccess.Repositories
             return output;
         }
 
-        public List<CpCustomerSettingDashboard> GetCustomerSettingNamedAccount(string search, string salesID, long approvalBy, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public List<CpCustomerSettingDashboard> GetCustomerSettingNamedAccount(string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             _sql = "[cp].[spGetCustomerSettingNamedAccounts]";
             var vParams = new DynamicParameters();
@@ -44,7 +44,6 @@ namespace DQFunnel.DataAccess.Repositories
             vParams.Add("@Blacklist", blacklist);
             vParams.Add("@Holdshipment", holdshipment);
             vParams.Add("@SalesIDs", salesID);
-            vParams.Add("@ApprovalBy", approvalBy);
 
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
@@ -62,7 +61,7 @@ namespace DQFunnel.DataAccess.Repositories
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
-        public List<CpCustomerSettingDashboard> GetCustomerSettingAllAccount(string search, string salesID, long approvalBy, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public List<CpCustomerSettingDashboard> GetCustomerSettingAllAccount(string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             _sql = "[cp].[spGetCustomerSettingAllAccounts]";
             var vParams = new DynamicParameters();
@@ -71,7 +70,6 @@ namespace DQFunnel.DataAccess.Repositories
             vParams.Add("@Blacklist", blacklist);
             vParams.Add("@Holdshipment", holdshipment);
             vParams.Add("@SalesIDs", salesID);
-            vParams.Add("@ApprovalBy", approvalBy);
 
             var output = _context.db.Query<CpCustomerSettingDashboard>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;

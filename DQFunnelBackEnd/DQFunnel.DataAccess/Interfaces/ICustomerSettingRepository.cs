@@ -9,9 +9,9 @@ namespace DQFunnel.DataAccess.Interfaces
     public interface ICustomerSettingRepository : IRepository<CpCustomerSetting>
     {
         List<CpCustomerSettingDashboard> GetCustomerSettingNoNamedAccount(string search, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
-        List<CpCustomerSettingDashboard> GetCustomerSettingNamedAccount(string search, string salesID, long approvalBy, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
+        List<CpCustomerSettingDashboard> GetCustomerSettingNamedAccount(string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
         List<CpCustomerSettingDashboard> GetCustomerSettingShareableAccount(string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
-        List<CpCustomerSettingDashboard> GetCustomerSettingAllAccount(string search, string salesID, long approvalBy, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
+        List<CpCustomerSettingDashboard> GetCustomerSettingAllAccount(string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
         CpCustomerSetting GetCustomerSettingBySalesID(long customerID, long SalesID);
         bool UpdateAllCustomerSetting(long id, CpCustomerSetting objEntity);
         List<CpCustomerSetting> GetCustomerSettingByCustomerID(long customerID);

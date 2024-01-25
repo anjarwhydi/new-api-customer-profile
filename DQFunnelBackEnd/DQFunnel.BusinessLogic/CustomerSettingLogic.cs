@@ -354,7 +354,7 @@ namespace DQFunnel.BusinessLogic
                             CreateDate = DateTime.Now,
                             RequestedBy = objEntity.RequestedBy,
                             RequestedDate = DateTime.Now,
-                            PMOCustomer = null
+                            PMOCustomer = false,
                         };
                         uow.CustomerSettingRepository.Add(newCustomerSetting);
                         newSalesHistory.Status = "Assign";

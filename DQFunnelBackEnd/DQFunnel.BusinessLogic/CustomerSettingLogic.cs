@@ -363,8 +363,9 @@ namespace DQFunnel.BusinessLogic
                     }
                     else if (existing.Count == 1)
                     {
+                        var approvalID = uow.CustomerSettingRepository.GetApprovalID();
                         newSalesHistory.Status = "Pending";
-                        newSalesHistory.ApprovalBy = 26932;
+                        newSalesHistory.ApprovalBy = approvalID;
                         uow.SalesHistoryRepository.Add(newSalesHistory);
                         result = MessageResult(true, "Wait for Approval!");
                     }
@@ -736,7 +737,7 @@ namespace DQFunnel.BusinessLogic
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
                     objEntity.ModifyDate = DateTime.Now;
-                    var existing = uow.CustomerSettingRepository.UpdateSpecificCustomerSetting(customerID, objEntity);
+                    uow.CustomerSettingRepository.UpdateSpecificCustomerSetting(customerID, objEntity);
                     result = MessageResult(true, "Update Success!");
                 }
             }

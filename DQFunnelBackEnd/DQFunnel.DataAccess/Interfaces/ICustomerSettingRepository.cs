@@ -28,5 +28,6 @@ namespace DQFunnel.DataAccess.Interfaces
         List<Req_CustomerSettingGetCustomerCategory_ViewModel> GetCustomerCategory();
         bool UpdateSpecificCustomerSetting(long id, CpCustomerSetting objEntity);
         List<Req_CustomerSettingGetCustomerDataByName_ViewModel> GetCustomerByName(string customerName);
+        long GetApprovalID();
     }
 }

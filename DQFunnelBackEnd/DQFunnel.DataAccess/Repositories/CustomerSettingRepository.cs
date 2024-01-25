@@ -180,6 +180,12 @@ namespace DQFunnel.DataAccess.Repositories
 
             return output;
         }
+        public long GetApprovalID()
+        {
+            _sql = "[cp].[spGetApproverShareableAccount]";
+            var output = _context.db.Query<long>(_sql, param: null, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            return output;
+        }
         public List<Req_CustomerSettingGetProjectHistory_ViewModel> GetProjectHistory(long customerID)
         {
             _sql = "[cp].[spGetProjectHistory]";

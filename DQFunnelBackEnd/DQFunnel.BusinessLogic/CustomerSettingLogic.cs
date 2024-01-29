@@ -257,7 +257,7 @@ namespace DQFunnel.BusinessLogic
 
             return result;
         }
-        public CpCustomerSettingEnvelope GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null, bool? showNoName = null, bool? showNamed = null, bool? showShareable = null)
+        public CpCustomerSettingEnvelope GetCustomerSettingAllAccount(int page, int pageSize, string column, string sorting, string search, string salesID, long? myAccount = null, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null, bool? showNoName = null, bool? showNamed = null, bool? showShareable = null)
         {
             CpCustomerSettingEnvelope result = new CpCustomerSettingEnvelope();
 
@@ -273,12 +273,16 @@ namespace DQFunnel.BusinessLogic
             {
                 IUnitOfWork uow = new UnitOfWork(_context);
 
-                var noName = (showNoName ?? true) ? uow.CustomerSettingRepository.GetCustomerSettingNoNamedAccount(search, pmoCustomer, blacklist, holdshipment) : new List<CpCustomerSettingDashboard>();
-                var Named = (showNamed ?? true) ? uow.CustomerSettingRepository.GetCustomerSettingNamedAccount(search, salesID, pmoCustomer, blacklist, holdshipment) : new List<CpCustomerSettingDashboard>();
-                var shareable = (showShareable ?? true) ? uow.CustomerSettingRepository.GetCustomerSettingShareableAccount(search, salesID, pmoCustomer, blacklist, holdshipment) : new List<CpCustomerSettingDashboard>();
+                var softwareDashboards = uow.CustomerSettingRepository.GetCustomerSettingAllAccount(search, salesID, pmoCustomer, blacklist, holdshipment);
+                var noName = (showNoName ?? true) ? softwareDashboards.Where(x => x.Named == false && x.Shareable == false).ToList() : new List<CpCustomerSettingDashboard>();
+                var Named = (showNamed ?? true) ? softwareDashboards.Where(x => x.Named == true && x.Shareable == false).ToList() : new List<CpCustomerSettingDashboard>();
+                var shareable = (showShareable ?? true) ? softwareDashboards.Where(x => x.Named == false && x.Shareable == true).ToList() : new List<CpCustomerSettingDashboard>();
 
                 var mergedList = noName.Concat(Named).Concat(shareable).ToList();
-
+                if (myAccount != null)
+                {
+                    mergedList = mergedList.Where(x => x.ApprovalBy == myAccount).ToList();
+                }
                 var resultSoftware = new List<CpCustomerSettingDashboard>();
 
                 if (page > 0)

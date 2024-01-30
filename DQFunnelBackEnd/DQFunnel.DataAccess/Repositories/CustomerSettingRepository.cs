@@ -22,12 +22,11 @@ namespace DQFunnel.DataAccess.Repositories
             this._transaction = transaction;
         }
 
-        public List<CpCustomerSettingDashboard> GetCustomerSettingNoNamedAccount(string search, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public List<CpCustomerSettingDashboard> GetCustomerSettingNoNamedAccount(string search, bool? blacklist = null, bool? holdshipment = null)
         {
             _sql = "[cp].[spGetCustomerSettingNoNamedAccounts]";
             var vParams = new DynamicParameters();
             vParams.Add("@SearchKeyword", search);
-            vParams.Add("@PMOCustomer", pmoCustomer);
             vParams.Add("@Blacklist", blacklist);
             vParams.Add("@Holdshipment", holdshipment);
 
@@ -237,6 +236,12 @@ namespace DQFunnel.DataAccess.Repositories
             var vParams = new DynamicParameters();
             vParams.Add("@Search", customerName);
             var output = _context.db.Query<Req_CustomerSettingGetCustomerDataByName_ViewModel>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            return output;
+        }
+        public List<Req_CustomerSettingGetRelatedCustomerAndLastProject_ViewModel> GetRelatedAndLast()
+        {
+            _sql = "[cp].[spGetRelatedAndLastProject]";
+            var output = _context.db.Query<Req_CustomerSettingGetRelatedCustomerAndLastProject_ViewModel>(_sql, param: null, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
     }

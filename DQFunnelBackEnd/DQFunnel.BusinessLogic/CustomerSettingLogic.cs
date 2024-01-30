@@ -78,7 +78,7 @@ namespace DQFunnel.BusinessLogic
             return result;
         }
 
-        public CpCustomerSettingEnvelope GetCustomerSettingNoNamedAccount(int page, int pageSize, string column, string sorting, string search, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public CpCustomerSettingEnvelope GetCustomerSettingNoNamedAccount(int page, int pageSize, string column, string sorting, string search, bool? blacklist = null, bool? holdshipment = null)
         {
             CpCustomerSettingEnvelope result = new CpCustomerSettingEnvelope();
 
@@ -94,7 +94,35 @@ namespace DQFunnel.BusinessLogic
             {
                 IUnitOfWork uow = new UnitOfWork(_context);
 
-                var softwareDashboards = uow.CustomerSettingRepository.GetCustomerSettingNoNamedAccount(search, pmoCustomer, blacklist, holdshipment);
+                var noNamed = uow.CustomerSettingRepository.GetCustomerSettingNoNamedAccount(search, blacklist, holdshipment);
+
+                var relatedLastProject = uow.CustomerSettingRepository.GetRelatedAndLast();
+
+                var softwareDashboards = (from x in noNamed
+                                          join y in relatedLastProject
+                                          on x.CustomerID equals y.CustomerID
+                                          select new CpCustomerSettingDashboard
+                                          {
+                                              CustomerID = x.CustomerID,
+                                              CustomerCategory = x.CustomerCategory,
+                                              CustomerName = x.CustomerName,
+                                              CustomerAddress = x.CustomerAddress,
+                                              LastProjectName = y.LastProjectName,
+                                              SalesName = x.SalesName,
+                                              PMOCustomer = x.PMOCustomer,
+                                              RelatedCustomer = y.RelatedCustomer,
+                                              Blacklist = x.Blacklist,
+                                              Holdshipment = x.Holdshipment,
+                                              Named = x.Named,
+                                              Shareable = x.Shareable,
+                                              CreatedBy = x.CreatedBy,
+                                              CreatedDate = x.CreatedDate,
+                                              ModifiedBy = x.ModifiedBy,
+                                              ModifiedDate = x.ModifiedDate,
+                                              RequestedBy = x.RequestedBy,
+                                              SalesShareableID = x.SalesShareableID,
+                                              ApprovalBy = x.ApprovalBy
+                                          }).ToList();
 
                 var resultSoftware = new List<CpCustomerSettingDashboard>();
 
@@ -154,7 +182,35 @@ namespace DQFunnel.BusinessLogic
             {
                 IUnitOfWork uow = new UnitOfWork(_context);
 
-                var softwareDashboards = uow.CustomerSettingRepository.GetCustomerSettingNamedAccount(search, salesID, pmoCustomer, blacklist, holdshipment);
+                var named = uow.CustomerSettingRepository.GetCustomerSettingNamedAccount(search, salesID, pmoCustomer, blacklist, holdshipment);
+
+                var relatedLastProject = uow.CustomerSettingRepository.GetRelatedAndLast();
+
+                var softwareDashboards = (from x in named
+                                          join y in relatedLastProject
+                                          on x.CustomerID equals y.CustomerID
+                                          select new CpCustomerSettingDashboard
+                                          {
+                                              CustomerID = x.CustomerID,
+                                              CustomerCategory = x.CustomerCategory,
+                                              CustomerName = x.CustomerName,
+                                              CustomerAddress = x.CustomerAddress,
+                                              LastProjectName = y.LastProjectName,
+                                              SalesName = x.SalesName,
+                                              PMOCustomer = x.PMOCustomer,
+                                              RelatedCustomer = y.RelatedCustomer,
+                                              Blacklist = x.Blacklist,
+                                              Holdshipment = x.Holdshipment,
+                                              Named = x.Named,
+                                              Shareable = x.Shareable,
+                                              CreatedBy = x.CreatedBy,
+                                              CreatedDate = x.CreatedDate,
+                                              ModifiedBy = x.ModifiedBy,
+                                              ModifiedDate = x.ModifiedDate,
+                                              RequestedBy = x.RequestedBy,
+                                              SalesShareableID = x.SalesShareableID,
+                                              ApprovalBy = x.ApprovalBy
+                                          }).ToList();
 
                 var resultSoftware = new List<CpCustomerSettingDashboard>();
 
@@ -214,8 +270,35 @@ namespace DQFunnel.BusinessLogic
             {
                 IUnitOfWork uow = new UnitOfWork(_context);
 
-                var softwareDashboards = uow.CustomerSettingRepository.GetCustomerSettingShareableAccount(search, salesID, pmoCustomer, blacklist, holdshipment);
+                var shareable = uow.CustomerSettingRepository.GetCustomerSettingShareableAccount(search, salesID, pmoCustomer, blacklist, holdshipment);
 
+                var relatedLastProject = uow.CustomerSettingRepository.GetRelatedAndLast();
+
+                var softwareDashboards = (from x in shareable
+                                          join y in relatedLastProject
+                                          on x.CustomerID equals y.CustomerID
+                                          select new CpCustomerSettingDashboard
+                                          {
+                                              CustomerID = x.CustomerID,
+                                              CustomerCategory = x.CustomerCategory,
+                                              CustomerName = x.CustomerName,
+                                              CustomerAddress = x.CustomerAddress,
+                                              LastProjectName = y.LastProjectName,
+                                              SalesName = x.SalesName,
+                                              PMOCustomer = x.PMOCustomer,
+                                              RelatedCustomer = y.RelatedCustomer,
+                                              Blacklist = x.Blacklist,
+                                              Holdshipment = x.Holdshipment,
+                                              Named = x.Named,
+                                              Shareable = x.Shareable,
+                                              CreatedBy = x.CreatedBy,
+                                              CreatedDate = x.CreatedDate,
+                                              ModifiedBy = x.ModifiedBy,
+                                              ModifiedDate = x.ModifiedDate,
+                                              RequestedBy = x.RequestedBy,
+                                              SalesShareableID = x.SalesShareableID,
+                                              ApprovalBy = x.ApprovalBy
+                                          }).ToList();
                 var resultSoftware = new List<CpCustomerSettingDashboard>();
 
                 if (page > 0)

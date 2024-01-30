@@ -8,7 +8,7 @@ namespace DQFunnel.DataAccess.Interfaces
 {
     public interface ICustomerSettingRepository : IRepository<CpCustomerSetting>
     {
-        List<CpCustomerSettingDashboard> GetCustomerSettingNoNamedAccount(string search, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
+        List<CpCustomerSettingDashboard> GetCustomerSettingNoNamedAccount(string search, bool? blacklist = null, bool? holdshipment = null);
         List<CpCustomerSettingDashboard> GetCustomerSettingNamedAccount(string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
         List<CpCustomerSettingDashboard> GetCustomerSettingShareableAccount(string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
         List<CpCustomerSettingDashboard> GetCustomerSettingAllAccount(string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null);
@@ -29,5 +29,6 @@ namespace DQFunnel.DataAccess.Interfaces
         bool UpdateSpecificCustomerSetting(long id, CpCustomerSetting objEntity);
         List<Req_CustomerSettingGetCustomerDataByName_ViewModel> GetCustomerByName(string customerName);
         long GetApprovalID();
+        List<Req_CustomerSettingGetRelatedCustomerAndLastProject_ViewModel> GetRelatedAndLast();
     }
 }

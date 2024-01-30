@@ -132,7 +132,7 @@ namespace DQFunnel.WebApi.Controllers
             }
         }
         [HttpPut("ApproveCustomerSetting")]
-        public IActionResult Update(long customerID, long salesID, bool isApprove, int modifyUserID, [FromBody] string description)
+        public IActionResult Update(long customerID, long salesID, bool isApprove, int modifyUserID, string description)
         {
             try
             {

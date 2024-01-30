@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using DQFunnel.BusinessLogic.Interfaces;
 using DQFunnel.BusinessLogic.Services;
@@ -91,11 +92,15 @@ namespace DQFunnel.BusinessLogic
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
 
-                    var pathFolder = Environment.CurrentDirectory.Replace("DQFunnel.WebApi", "Uploads\\RelatedFile");
-
-                    if (!Directory.Exists(pathFolder))
+                    // var pathFolder = Environment.CurrentDirectory.Replace("DQFunnel.WebApi", "Uploads\\RelatedFile");
+                    var udc = genericAPI.GetByEntryKey("PathCustomerProfileRelated");
+                    var pathFolder = string.Empty;
+                    if (udc.Count > 1)
                     {
-                        Directory.CreateDirectory(pathFolder);
+                        if (!string.IsNullOrEmpty(udc.First().Text1))
+                        {
+                            pathFolder = udc.First().Text1;
+                        }
                     }
 
                     var setName = objEntity.DocumentName;

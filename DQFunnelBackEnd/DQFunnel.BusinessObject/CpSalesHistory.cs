@@ -11,6 +11,7 @@ namespace DQFunnel.BusinessObject
         public long CustomerID { get; set; }
         public long SalesID { get; set; }
         public string Status { get; set; }
+        public string Description { get; set; }
         public long RequestedBy { get; set; }
         public DateTime RequestedDate { get; set; }
         public long ApprovalBy { get; set; }

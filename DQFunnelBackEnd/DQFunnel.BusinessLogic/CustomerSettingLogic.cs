@@ -574,7 +574,7 @@ namespace DQFunnel.BusinessLogic
             }
             return result;
         }
-        public ResultAction ApproveCustomerSetting(long customerID, long salesID, bool isApprove, int? modifyUserID)
+        public ResultAction ApproveCustomerSetting(long customerID, long salesID, bool isApprove, string description, int? modifyUserID)
         {
             ResultAction result = new ResultAction();
             try
@@ -590,6 +590,7 @@ namespace DQFunnel.BusinessLogic
                     if (!isApprove)
                     {
                         existing.Status = "Rejected";
+                        existing.Description = description;
                     }
                     else
                     {

@@ -100,17 +100,18 @@ namespace DQFunnel.BusinessLogic
 
                 var softwareDashboards = (from x in noNamed
                                           join y in relatedLastProject
-                                          on x.CustomerID equals y.CustomerID
+                                          on x.CustomerID equals y.CustomerID into relatedProjects
+                                          from y in relatedProjects.DefaultIfEmpty()
                                           select new CpCustomerSettingDashboard
                                           {
                                               CustomerID = x.CustomerID,
                                               CustomerCategory = x.CustomerCategory,
                                               CustomerName = x.CustomerName,
                                               CustomerAddress = x.CustomerAddress,
-                                              LastProjectName = y.LastProjectName,
+                                              LastProjectName = (y != null) ? y.LastProjectName : null,
                                               SalesName = x.SalesName,
                                               PMOCustomer = x.PMOCustomer,
-                                              RelatedCustomer = y.RelatedCustomer,
+                                              RelatedCustomer = (y != null) ? y.RelatedCustomer : null,
                                               Blacklist = x.Blacklist,
                                               Holdshipment = x.Holdshipment,
                                               Named = x.Named,
@@ -188,17 +189,18 @@ namespace DQFunnel.BusinessLogic
 
                 var softwareDashboards = (from x in named
                                           join y in relatedLastProject
-                                          on x.CustomerID equals y.CustomerID
+                                          on x.CustomerID equals y.CustomerID into relatedProjects
+                                          from y in relatedProjects.DefaultIfEmpty()
                                           select new CpCustomerSettingDashboard
                                           {
                                               CustomerID = x.CustomerID,
                                               CustomerCategory = x.CustomerCategory,
                                               CustomerName = x.CustomerName,
                                               CustomerAddress = x.CustomerAddress,
-                                              LastProjectName = y.LastProjectName,
+                                              LastProjectName = (y != null) ? y.LastProjectName : null,
                                               SalesName = x.SalesName,
                                               PMOCustomer = x.PMOCustomer,
-                                              RelatedCustomer = y.RelatedCustomer,
+                                              RelatedCustomer = (y != null) ? y.RelatedCustomer : null,
                                               Blacklist = x.Blacklist,
                                               Holdshipment = x.Holdshipment,
                                               Named = x.Named,
@@ -276,17 +278,18 @@ namespace DQFunnel.BusinessLogic
 
                 var softwareDashboards = (from x in shareable
                                           join y in relatedLastProject
-                                          on x.CustomerID equals y.CustomerID
+                                          on x.CustomerID equals y.CustomerID into relatedProjects
+                                          from y in relatedProjects.DefaultIfEmpty()
                                           select new CpCustomerSettingDashboard
                                           {
                                               CustomerID = x.CustomerID,
                                               CustomerCategory = x.CustomerCategory,
                                               CustomerName = x.CustomerName,
                                               CustomerAddress = x.CustomerAddress,
-                                              LastProjectName = y.LastProjectName,
+                                              LastProjectName = (y != null) ? y.LastProjectName : null,
                                               SalesName = x.SalesName,
                                               PMOCustomer = x.PMOCustomer,
-                                              RelatedCustomer = y.RelatedCustomer,
+                                              RelatedCustomer = (y != null) ? y.RelatedCustomer : null,
                                               Blacklist = x.Blacklist,
                                               Holdshipment = x.Holdshipment,
                                               Named = x.Named,
@@ -299,6 +302,7 @@ namespace DQFunnel.BusinessLogic
                                               SalesShareableID = x.SalesShareableID,
                                               ApprovalBy = x.ApprovalBy
                                           }).ToList();
+
                 var resultSoftware = new List<CpCustomerSettingDashboard>();
 
                 if (page > 0)
@@ -356,7 +360,37 @@ namespace DQFunnel.BusinessLogic
             {
                 IUnitOfWork uow = new UnitOfWork(_context);
 
-                var softwareDashboards = uow.CustomerSettingRepository.GetCustomerSettingAllAccount(search, salesID, pmoCustomer, blacklist, holdshipment);
+                var allAccount = uow.CustomerSettingRepository.GetCustomerSettingAllAccount(search, salesID, pmoCustomer, blacklist, holdshipment);
+
+                var relatedLastProject = uow.CustomerSettingRepository.GetRelatedAndLast();
+
+                var softwareDashboards = (from x in allAccount
+                                          join y in relatedLastProject
+                                          on x.CustomerID equals y.CustomerID into relatedProjects
+                                          from y in relatedProjects.DefaultIfEmpty()
+                                          select new CpCustomerSettingDashboard
+                                          {
+                                              CustomerID = x.CustomerID,
+                                              CustomerCategory = x.CustomerCategory,
+                                              CustomerName = x.CustomerName,
+                                              CustomerAddress = x.CustomerAddress,
+                                              LastProjectName = (y != null) ? y.LastProjectName : null,
+                                              SalesName = x.SalesName,
+                                              PMOCustomer = x.PMOCustomer,
+                                              RelatedCustomer = (y != null) ? y.RelatedCustomer : null,
+                                              Blacklist = x.Blacklist,
+                                              Holdshipment = x.Holdshipment,
+                                              Named = x.Named,
+                                              Shareable = x.Shareable,
+                                              CreatedBy = x.CreatedBy,
+                                              CreatedDate = x.CreatedDate,
+                                              ModifiedBy = x.ModifiedBy,
+                                              ModifiedDate = x.ModifiedDate,
+                                              RequestedBy = x.RequestedBy,
+                                              SalesShareableID = x.SalesShareableID,
+                                              ApprovalBy = x.ApprovalBy
+                                          }).ToList();
+
                 var noName = (showNoName ?? true) ? softwareDashboards.Where(x => x.Named == false && x.Shareable == false).ToList() : new List<CpCustomerSettingDashboard>();
                 var Named = (showNamed ?? true) ? softwareDashboards.Where(x => x.Named == true && x.Shareable == false).ToList() : new List<CpCustomerSettingDashboard>();
                 var shareable = (showShareable ?? true) ? softwareDashboards.Where(x => x.Named == false && x.Shareable == true).ToList() : new List<CpCustomerSettingDashboard>();

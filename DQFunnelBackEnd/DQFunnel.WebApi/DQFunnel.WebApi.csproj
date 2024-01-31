@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -9,6 +9,10 @@
     <WarningsAsErrors>NU1605</WarningsAsErrors>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="DQFunnel.WebApi.xml" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Google.Apis.Sheets.v4" Version="1.52.0.2338" />
@@ -38,12 +42,6 @@
 
   <ItemGroup>
     <Folder Include="Connected Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="DQFunnel.WebApi.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 

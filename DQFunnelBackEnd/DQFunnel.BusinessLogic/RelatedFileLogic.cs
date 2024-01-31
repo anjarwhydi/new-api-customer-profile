@@ -93,16 +93,16 @@ namespace DQFunnel.BusinessLogic
                     IUnitOfWork uow = new UnitOfWork(_context);
 
                     // var pathFolder = Environment.CurrentDirectory.Replace("DQFunnel.WebApi", "Uploads\\RelatedFile");
-                    // var udc = genericAPI.GetByEntryKey("PathCustomerProfileRelated");
-                    // var pathFolder = string.Empty;
-                    var pathFolder = "\\\\192.168.10.26\\Asset\\BHP\\DataQuality\\CustomerProfileRelated\\";
-                    // if (udc.Count > 1)
-                    // {
-                    //     if (!string.IsNullOrEmpty(udc.First().Text1))
-                    //     {
-                    //         pathFolder = udc.First().Text1;
-                    //     }
-                    // }
+                    var udc = genericAPI.GetByEntryKey("PathCustomerProfileRelated");
+                    var pathFolder = string.Empty;
+                    // var pathFolder = "\\\\192.168.10.26\\Asset\\BHP\\DataQuality\\CustomerProfileRelated\\";
+                    if (udc.Count > 1)
+                    {
+                        if (!string.IsNullOrEmpty(udc.First().Text1))
+                        {
+                            pathFolder = udc.First().Text1;
+                        }
+                    }
 
                     var setName = objEntity.DocumentName;
                     var fileName = objEntity.File.FileName;

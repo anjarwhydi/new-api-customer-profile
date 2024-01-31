@@ -167,7 +167,7 @@ namespace DQFunnel.BusinessLogic
             return result;
         }
 
-        public CpCustomerSettingEnvelope GetCustomerSettingNamedAccount(int page, int pageSize, string column, string sorting, string search, string salesID, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
+        public CpCustomerSettingEnvelope GetCustomerSettingNamedAccount(int page, int pageSize, string column, string sorting, string search, string salesID, long? myAccount = null, bool? pmoCustomer = null, bool? blacklist = null, bool? holdshipment = null)
         {
             CpCustomerSettingEnvelope result = new CpCustomerSettingEnvelope();
 
@@ -215,6 +215,10 @@ namespace DQFunnel.BusinessLogic
                                           }).ToList();
 
                 var resultSoftware = new List<CpCustomerSettingDashboard>();
+                if (myAccount != null)
+                {
+                    softwareDashboards = softwareDashboards.Where(x => x.ApprovalBy == myAccount).ToList();
+                }
 
                 if (page > 0)
                 {

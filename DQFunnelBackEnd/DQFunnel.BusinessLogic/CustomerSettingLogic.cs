@@ -219,7 +219,7 @@ namespace DQFunnel.BusinessLogic
                 var resultSoftware = new List<CpCustomerSettingDashboard>();
                 if (myAccount != null)
                 {
-                    softwareDashboards = softwareDashboards.Where(x => x.ApprovalBy == myAccount).ToList();
+                    softwareDashboards = softwareDashboards.Where(x => x.ApprovalBy == myAccount && x.Status == "Pending").ToList();
                 }
 
                 if (page > 0)

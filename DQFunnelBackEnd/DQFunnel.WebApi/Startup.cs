@@ -176,6 +176,10 @@ namespace DQFunnel.WebApi
                 s.SwaggerEndpoint($"/doc/{Configuration["Service:DocName"]}/swagger.json",
                     $"{Configuration["Service:Name"]} {Configuration["Service:Version"]}");
             });
+
+
+
+
         }
     }
 }

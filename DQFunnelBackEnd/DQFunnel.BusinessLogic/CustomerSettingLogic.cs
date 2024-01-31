@@ -122,7 +122,8 @@ namespace DQFunnel.BusinessLogic
                                               ModifiedDate = x.ModifiedDate,
                                               RequestedBy = x.RequestedBy,
                                               SalesShareableID = x.SalesShareableID,
-                                              ApprovalBy = x.ApprovalBy
+                                              ApprovalBy = x.ApprovalBy,
+                                              Status = x.Status
                                           }).ToList();
 
                 var resultSoftware = new List<CpCustomerSettingDashboard>();
@@ -211,7 +212,8 @@ namespace DQFunnel.BusinessLogic
                                               ModifiedDate = x.ModifiedDate,
                                               RequestedBy = x.RequestedBy,
                                               SalesShareableID = x.SalesShareableID,
-                                              ApprovalBy = x.ApprovalBy
+                                              ApprovalBy = x.ApprovalBy,
+                                              Status = x.Status
                                           }).ToList();
 
                 var resultSoftware = new List<CpCustomerSettingDashboard>();
@@ -304,7 +306,8 @@ namespace DQFunnel.BusinessLogic
                                               ModifiedDate = x.ModifiedDate,
                                               RequestedBy = x.RequestedBy,
                                               SalesShareableID = x.SalesShareableID,
-                                              ApprovalBy = x.ApprovalBy
+                                              ApprovalBy = x.ApprovalBy,
+                                              Status = x.Status
                                           }).ToList();
 
                 var resultSoftware = new List<CpCustomerSettingDashboard>();

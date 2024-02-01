@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using DQFunnel.BusinessLogic.Interfaces;
 using DQFunnel.BusinessLogic.Services;
@@ -91,8 +92,6 @@ namespace DQFunnel.BusinessLogic
                 using (_context)
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
-
-                    // var pathFolder = Environment.CurrentDirectory.Replace("DQFunnel.WebApi", "Uploads\\RelatedFile");
                     var udc = genericAPI.GetByEntryKey("PathCustomerProfileRelated");
                     var pathFolder = string.Empty;
                     // var pathFolder = "\\\\192.168.10.26\\Asset\\BHP\\DataQuality\\CustomerProfileRelated\\";
@@ -103,6 +102,11 @@ namespace DQFunnel.BusinessLogic
                             pathFolder = udc.First().Text1;
                         }
                     }
+
+                    NetworkCredential theNetworkCredential = new NetworkCredential(@"anjar.wahyudi", "Aws!2345");
+                    CredentialCache theNetCache = new CredentialCache();
+                    theNetCache.Add(new Uri(pathFolder), "Basic", theNetworkCredential);
+                    // var pathFolder = Environment.CurrentDirectory.Replace("DQFunnel.WebApi", "Uploads\\RelatedFile");
 
                     var setName = objEntity.DocumentName;
                     var fileName = objEntity.File.FileName;

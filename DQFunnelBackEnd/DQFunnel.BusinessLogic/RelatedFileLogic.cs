@@ -92,27 +92,19 @@ namespace DQFunnel.BusinessLogic
                 using (_context)
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
-                    var udc = genericAPI.GetByEntryKey("PathCustomerProfileRelated");
-                    var pathFolder = string.Empty;
-                    // var pathFolder = "\\\\192.168.10.26\\Asset\\BHP\\DataQuality\\CustomerProfileRelated\\";
-                    if (udc.Count > 1)
-                    {
-                        if (!string.IsNullOrEmpty(udc.First().Text1))
-                        {
-                            pathFolder = udc.First().Text1;
-                        }
-                    }
 
-                    NetworkCredential theNetworkCredential = new NetworkCredential(@"anjar.wahyudi", "Aws!2345");
-                    CredentialCache theNetCache = new CredentialCache();
-                    theNetCache.Add(new Uri(pathFolder), "Basic", theNetworkCredential);
-                    // var pathFolder = Environment.CurrentDirectory.Replace("DQFunnel.WebApi", "Uploads\\RelatedFile");
+                    var pathFolder = @"\\192.168.10.26\Asset\BHP\DataQuality\CustomerProfileRelated\";
+
+                    var theNetworkCredential = new NetworkCredential("anjar.wahyudi", "Aws!2345");
 
                     var setName = objEntity.DocumentName;
                     var fileName = objEntity.File.FileName;
                     var documentType = Path.GetExtension(fileName);
 
                     var filePath = Path.Combine(pathFolder, setName + documentType);
+
+                    var request = WebRequest.Create(pathFolder) as HttpWebRequest;
+                    request.Credentials = theNetworkCredential;
 
                     var existing = uow.RelatedFileRepository.GetRelatedFileByDocumentPath(filePath);
                     string newFilePath = null;
@@ -136,21 +128,24 @@ namespace DQFunnel.BusinessLogic
                             number++;
                         }
                     }
+
                     using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                     {
                         objEntity.File.CopyTo(fileStream);
                     }
 
-                    var insertModel = new CpRelatedFile();
-                    insertModel.RFileID = 0;
-                    insertModel.CustomerID = objEntity.CustomerID;
-                    insertModel.DocumentName = setName + documentType;
-                    insertModel.DocumentType = objEntity.DocumentType;
-                    insertModel.DocumentPath = filePath;
-                    insertModel.CreateDate = DateTime.Now;
-                    insertModel.CreateUserID = objEntity.CreateUserID;
-                    insertModel.ModifyDate = DateTime.Now;
-                    insertModel.ModifyUserID = objEntity.ModifyUserID;
+                    var insertModel = new CpRelatedFile
+                    {
+                        RFileID = 0,
+                        CustomerID = objEntity.CustomerID,
+                        DocumentName = setName + documentType,
+                        DocumentType = objEntity.DocumentType,
+                        DocumentPath = filePath,
+                        CreateDate = DateTime.Now,
+                        CreateUserID = objEntity.CreateUserID,
+                        ModifyDate = DateTime.Now,
+                        ModifyUserID = objEntity.ModifyUserID
+                    };
 
                     uow.RelatedFileRepository.Add(insertModel);
 
@@ -159,11 +154,84 @@ namespace DQFunnel.BusinessLogic
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
                 result = MessageResult(false, ex.Message);
             }
+
             return result;
         }
+
+        // public ResultAction InsertRelatedFile(Req_CustomerSettingInsertRelatedFile_ViewModel objEntity)
+        // {
+        //     ResultAction result = new ResultAction();
+
+        //     try
+        //     {
+        //         using (_context)
+        //         {
+        //             IUnitOfWork uow = new UnitOfWork(_context);
+
+        //             var driveLetter = "Z:";
+        //             var pathFolder = Path.Combine(driveLetter, "Asset\\BHP\\DataQuality\\CustomerProfileRelated");
+
+        //             var setName = objEntity.DocumentName;
+        //             var fileName = objEntity.File.FileName;
+        //             var documentType = Path.GetExtension(fileName);
+
+        //             var filePath = Path.Combine(pathFolder, setName + documentType);
+
+        //             var existing = uow.RelatedFileRepository.GetRelatedFileByDocumentPath(filePath);
+        //             string newFilePath = null;
+
+        //             if (existing != null)
+        //             {
+        //                 int number = 1;
+
+        //                 while (true)
+        //                 {
+        //                     var newFileName = $"{setName}({number})";
+        //                     newFilePath = Path.Combine(pathFolder, newFileName + documentType);
+
+        //                     var newExisting = uow.RelatedFileRepository.GetRelatedFileByDocumentPath(newFilePath);
+
+        //                     if (newExisting == null)
+        //                     {
+        //                         fileName = newFileName;
+        //                         filePath = newFilePath; // Update filePath with the new file path
+        //                         break;
+        //                     }
+        //                     number++;
+        //                 }
+        //             }
+
+        //             using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+        //             {
+        //                 objEntity.File.CopyTo(fileStream);
+        //             }
+
+        //             var insertModel = new CpRelatedFile
+        //             {
+        //                 RFileID = 0,
+        //                 CustomerID = objEntity.CustomerID,
+        //                 DocumentName = setName + documentType,
+        //                 DocumentType = objEntity.DocumentType,
+        //                 DocumentPath = filePath,
+        //                 CreateDate = DateTime.Now,
+        //                 CreateUserID = objEntity.CreateUserID,
+        //                 ModifyDate = DateTime.Now,
+        //                 ModifyUserID = objEntity.ModifyUserID
+        //             };
+
+        //             uow.RelatedFileRepository.Add(insertModel);
+
+        //             result = MessageResult(true, "Insert Data Success!");
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         result = MessageResult(false, ex.Message);
+        //     }
+        //     return result;
+        // }
 
 
         public ResultAction UpdateRelatedFile(long Id, CpRelatedFile objEntity)

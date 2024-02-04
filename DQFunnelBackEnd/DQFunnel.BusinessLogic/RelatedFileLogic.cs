@@ -148,7 +148,7 @@ namespace DQFunnel.BusinessLogic
                     insertModel.DocumentType = objEntity.DocumentType;
                     insertModel.DocumentPath = filePath;
                     insertModel.CreateDate = DateTime.Now;
-                    insertModel.CreateUserID = (string.IsNullOrEmpty(objEntity.CreateUserID)) ? 0 : int.Parse(objEntity.CreateUserID);
+                    insertModel.CreateUserID = objEntity.CreateUserID;
                     insertModel.ModifyDate = DateTime.Now;
                     insertModel.ModifyUserID = objEntity.ModifyUserID;
 

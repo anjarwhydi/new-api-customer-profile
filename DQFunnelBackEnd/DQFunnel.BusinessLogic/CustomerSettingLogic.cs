@@ -560,8 +560,8 @@ namespace DQFunnel.BusinessLogic
                     uow.CustomerSettingRepository.DeleteCustomerSettingBySalesID(customerID, salesID);
 
                     var listCustomerSetting = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(customerID);
-                    if (listCustomerSetting.Count > 0)
-                    {
+
+                    if(listCustomerSetting.Count == 1) {
                         var cs = listCustomerSetting.First();
                         cs.Named = true;
                         cs.Shareable = false;

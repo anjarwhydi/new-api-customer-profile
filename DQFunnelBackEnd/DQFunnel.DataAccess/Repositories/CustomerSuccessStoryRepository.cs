@@ -21,12 +21,12 @@ namespace DQFunnel.DataAccess.Repositories
             this._transaction = transaction;
         }
 
-        public List<Req_CustomerSettingGetModifySuccessStories_ViewModel> GetCustomerStoriesByCustomerID(long funnelID)
+        public List<string> GetCustomerStoriesByCustomerID(long funnelID)
         {
             _sql = "[cp].[spGetModifySuccessStories]";
             var vParams = new DynamicParameters();
             vParams.Add("@FunnelID", funnelID);
-            var output = _context.db.Query<Req_CustomerSettingGetModifySuccessStories_ViewModel>(_sql, param: (object)vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            var output = _context.db.Query<string>(_sql, param: (object)vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
     }

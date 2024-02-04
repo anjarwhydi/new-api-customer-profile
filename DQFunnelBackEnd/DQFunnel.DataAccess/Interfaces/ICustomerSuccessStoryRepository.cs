@@ -8,6 +8,6 @@ namespace DQFunnel.DataAccess.Interfaces
 {
     public interface ICustomerSuccessStoryRepository : IRepository<CpCustomerSuccessStory>
     {
-        List<Req_CustomerSettingGetModifySuccessStories_ViewModel> GetCustomerStoriesByCustomerID(long funnelID);
+        List<string> GetCustomerStoriesByCustomerID(long funnelID);
     }
 }

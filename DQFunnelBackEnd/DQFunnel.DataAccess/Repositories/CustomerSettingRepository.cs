@@ -224,10 +224,10 @@ namespace DQFunnel.DataAccess.Repositories
             var output = _context.db.Query<Req_CustomerSettingGetSalesData_ViewModel>(_sql, param: vParams, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
-        public List<Req_CustomerSettingGetCustomerCategory_ViewModel> GetCustomerCategory()
+        public List<string> GetCustomerCategory()
         {
             _sql = "[cp].[spGetCustomerCategory]";
-            var output = _context.db.Query<Req_CustomerSettingGetCustomerCategory_ViewModel>(_sql, param: null, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
+            var output = _context.db.Query<string>(_sql, param: null, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).ToList();
             return output;
         }
         public List<Req_CustomerSettingGetCustomerDataByName_ViewModel> GetCustomerByName(string customerName)

@@ -10,7 +10,7 @@ namespace DQFunnel.BusinessObject.ViewModel
         public string DocumentType { get; set; }
         public IFormFile File { get; set; }
         public DateTime? CreateDate { get; set; }
-        public string? CreateUserID { get; set; }
+        public int CreateUserID { get; set; }
         public DateTime? ModifyDate { get; set; }
         public int? ModifyUserID { get; set; }
     }

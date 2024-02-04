@@ -15,6 +15,6 @@ namespace DQFunnel.BusinessObject.ViewModel
         public string SOCloseDate { get; set; }
         public float SOAmount { get; set; }
         public string SuccessStory { get; set; }
-        public List<Req_CustomerSettingGetModifySuccessStories_ViewModel> ModifiedStoryBy { get; set; }
+        public List<string> ModifiedStoryBy { get; set; }
     }
 }

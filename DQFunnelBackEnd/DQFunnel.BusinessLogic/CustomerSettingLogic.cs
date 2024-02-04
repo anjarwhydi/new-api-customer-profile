@@ -778,6 +778,15 @@ namespace DQFunnel.BusinessLogic
             ResultAction result = new ResultAction();
             try
             {
+                // var udc = genericAPI.GetByEntryKey("CustomerCategory");
+                // List<string> existing = null;
+                // if (udc.Count > 1)
+                // {
+                //     if (!string.IsNullOrEmpty(udc.First().Text1))
+                //     {
+                //         existing = udc.Select(x => x.Text1).ToList();
+                //     }
+                // }
                 using (_context)
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);

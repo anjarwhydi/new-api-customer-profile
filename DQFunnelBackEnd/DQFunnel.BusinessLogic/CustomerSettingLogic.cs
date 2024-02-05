@@ -7,6 +7,7 @@ using DQFunnel.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace DQFunnel.BusinessLogic
@@ -459,7 +460,19 @@ namespace DQFunnel.BusinessLogic
                     IUnitOfWork uow = new UnitOfWork(_context);
 
                     var existing = uow.CustomerSettingRepository.GetCustomerSettingByCustomerID(objEntity.CustomerID);
-
+                    var alreadyAssign = uow.SalesHistoryRepository.GetAll().FirstOrDefault(x => x.CustomerID == objEntity.CustomerID && x.SalesID == objEntity.SalesID && x.Status != "Rejected");
+                    if (alreadyAssign != null)
+                    {
+                        if(alreadyAssign.Status == "Pending")
+                        {
+                            return result = MessageResult(false, "Please wait for approval.");
+                        }
+                        else
+                        {
+                            return result = MessageResult(false, "Already assigned");
+                        }
+                        
+                    }
                     CpSalesHistory newSalesHistory = new CpSalesHistory()
                     {
                         SalesID = objEntity.SalesID,

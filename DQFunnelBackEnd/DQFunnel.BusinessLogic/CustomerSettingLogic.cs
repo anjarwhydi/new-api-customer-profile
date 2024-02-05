@@ -592,7 +592,7 @@ namespace DQFunnel.BusinessLogic
                 using (_context)
                 {
                     IUnitOfWork uow = new UnitOfWork(_context);
-                    var existing = uow.SalesHistoryRepository.GetAll().FirstOrDefault(x => x.CustomerID == customerID && x.SalesID == salesID);
+                    var existing = uow.SalesHistoryRepository.GetAll().OrderByDescending(y => y.CreateDate).FirstOrDefault(x => x.CustomerID == customerID && x.SalesID == salesID);
                     if (existing == null)
                     {
                         return MessageResult(false, "Data not found!");

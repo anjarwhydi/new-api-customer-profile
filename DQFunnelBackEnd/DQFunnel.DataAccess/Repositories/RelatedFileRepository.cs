@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using Dapper;
 using DapperExtensions;
 using DQFunnel.BusinessObject;
 using DQFunnel.DataAccess.Interfaces;
@@ -38,6 +39,12 @@ namespace DQFunnel.DataAccess.Repositories
             var pg = new PredicateGroup { Operator = GroupOperator.And, Predicates = new List<IPredicate>() };
             pg.Predicates.Add(Predicates.Field<CpRelatedFile>(c => c.DocumentPath, Operator.Eq, documentPath));
             return _context.db.GetList<CpRelatedFile>(pg).FirstOrDefault();
+        }
+        public string PathCustomerProfileRelated()
+        {
+            _sql = "[cp].[spGetPathCustomerProfileRelated]";
+            var output = _context.db.Query<string>(_sql, param: null, transaction: _transaction, buffered: false, commandTimeout: null, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            return output;
         }
     }
 }

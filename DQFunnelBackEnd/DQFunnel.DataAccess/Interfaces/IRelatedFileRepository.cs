@@ -10,5 +10,6 @@ namespace DQFunnel.DataAccess.Interfaces
         CpRelatedFile GetRelatedFileById(long Id);
         List<CpRelatedFile> GetRelatedFileByCustomerID(long customerID);
         CpRelatedFile GetRelatedFileByDocumentPath(string documentPath);
+        string PathCustomerProfileRelated();
     }
 }

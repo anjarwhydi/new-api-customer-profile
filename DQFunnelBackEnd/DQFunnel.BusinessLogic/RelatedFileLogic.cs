@@ -172,8 +172,13 @@ namespace DQFunnel.BusinessLogic
 
                     //var driveLetter = "Z:";
                     //var pathFolder = Path.Combine(driveLetter, "BHP\\DataQuality\\CustomerProfileRelated");
-                    var pathFolder = "Z:";
+                    //var pathFolder = "Z:";
 
+                    var pathFolder = uow.RelatedFileRepository.PathCustomerProfileRelated();
+                    if (pathFolder == null)
+                    {
+                        return MessageResult(false, "Path not found!");
+                    }
                     var setName = objEntity.DocumentName;
                     var fileName = objEntity.File.FileName;
                     var documentType = Path.GetExtension(fileName);

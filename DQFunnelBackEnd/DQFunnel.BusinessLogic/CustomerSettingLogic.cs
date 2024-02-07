@@ -396,7 +396,8 @@ namespace DQFunnel.BusinessLogic
                                               ModifiedDate = x.ModifiedDate,
                                               RequestedBy = x.RequestedBy,
                                               SalesShareableID = x.SalesShareableID,
-                                              ApprovalBy = x.ApprovalBy
+                                              ApprovalBy = x.ApprovalBy,
+                                              Status = x.Status
                                           }).ToList();
 
                 var noName = (showNoName ?? true) ? softwareDashboards.Where(x => x.Named == false && x.Shareable == false).ToList() : new List<CpCustomerSettingDashboard>();
